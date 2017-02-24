@@ -1,0 +1,73 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        table {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > {{ 'Génération du dossier'|upper }}</h2>
+    <section class="section">
+        <h4 style="margin: 0; text-transform: uppercase;">Informations sur le dossier :</h4>
+
+        <br />
+        <br />
+
+        <form method="post" action="{{ path('dossier_pdf') }}">
+
+          <table>
+            <tr>
+              <div id="dateDebutDiv">
+                <td><label id="dateDebutTxt">Date de début :</label></td>
+                <td><input type="text" class="datepicker" id="dateDeb" name="dateDebut" placeholder="JJ/MM/AAAA" required pattern="\d{1,2}/\d{1,2}/\d{4}"style="height: 33px; width: 400px; padding: 0 0 0 15px;margin: 0; border: none;"></td>
+              </div>
+            </tr>
+
+            <tr>
+              <div id="dateFinDiv">
+                <td><label id="dateFinTxt">Date de fin (*) :</label></td>
+                <td><input type="text" class="datepicker" id="dateFin" name="dateFin" placeholder="JJ/MM/AAAA" pattern="\d{1,2}/\d{1,2}/\d{4}" style="height: 33px; width: 400px; padding: 0 0 0 15px;margin: 0; border: none;"></td>
+              </div>
+            </tr>
+          </table>
+          <br />
+
+          <i>(*) : Champ facultatif (Un mois si non rempli)</i>
+
+          <br />
+          <br />
+
+          <input type="submit" value="Générer"/>
+        <form>
+
+    </section>
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  var jQuery_1_12_1 = $.noConflict(true);
+
+  jQuery_1_12_1(document).ready(function(){
+    jQuery(jQuery_1_12_1(function() {
+      jQuery_1_12_1(".datepicker").datepicker({
+        altField: "#datepicker",
+        closeText: 'Fermer',
+        prevText: 'Précédent',
+        nextText: 'Suivant',
+        currentText: 'Aujourd\'hui',
+        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+        monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+        dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+        dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+        weekHeader: 'Sem.',
+        dateFormat: 'dd/mm/yy'
+      });
+    }));
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/base.css') }}"/>
+    <style>
+        .bouton {
+            border: 2px solid #4e678b;
+            border-radius: 3px;
+            background-color: white;
+            padding: 8px;
+            color: #4e678b;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .bouton:hover {
+            background-color: #4e678b;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1 style="text-transform: uppercase; font-size: 20px; text-align: center;">Bienvenue au Centre de documentation de l'IUT de Nantes</h1>
+    <p style="margin-top: 20px; text-align:center;">Bienvenue sur le site de gestion des articles de l'IUT de Nantes. Vous pourrez y rechercher des articles de périodiques selon plusieurs critères.</p>
+
+    <ul style="float: center; list-style-type: none; text-align: center;">
+        <li><img width="400px" src="{{ asset('img/screenshot/liste-resultats.png') }}"/></li>
+        <li><img width="400px" src="{{ asset('img/screenshot/recherche-avancee.png') }}"/></li>
+    </ul>
+    <a href="{{ path('connexion') }}" class="bouton" style="display: inline-block; margin: auto;">Se connecter</a>
+{% endblock %}

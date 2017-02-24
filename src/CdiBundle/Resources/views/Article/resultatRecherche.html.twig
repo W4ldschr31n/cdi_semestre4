@@ -1,0 +1,341 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+<style type="text/css" class="init">
+
+</style>
+<link rel="stylesheet" href="{{ asset('css/base.css') }}"/>
+<style>
+ul{
+  list-style: none;
+  padding: 0;
+}
+.tableauxArticle {
+  width : 100%;
+}
+
+.article{
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  background-color: #E8E8E8;
+  color: black;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.article h5{
+  text-transform: uppercase;
+  padding-left : 10px;
+  color: black;
+}
+
+.article:hover{
+  background-color: #D9D9D9;
+  cursor:  pointer;
+}
+
+.article p{
+  font-size: 12px;
+  margin: 0;
+  margin-top: 4px;
+}
+
+</style>
+{% endblock %}
+
+{% block body %}
+<section id="contenu">
+  {% if app.session.get('status') is defined and app.session.get('status') == 'etudiant' %}
+  <h2 class="fil_ariane"><a href="{{ path('accueil') }}">Accueil</a> > {{ 'Résultat de la recherche'|upper }}</h2>
+  {% else %}
+  <h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > {{ 'Résultat de la recherche'|upper }}</h2>
+  {% endif %}
+  <section class="section" style="margin-bottom: 40px; position: relative; top: -10px;">
+    <!-- <h3 style="margin: 0; font-size: 14px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px; margin-top: -10px;">Recherche :</h3> -->
+    {% include 'AppBundle::formulaireRecherche.html.twig' %}
+  </section>
+  {# Si la recherche trouve des articles, on affiche la liste #}
+  {% if articles %}
+  <section>
+    <table class="display" id='table_recherche'>
+      <thead>
+        <tr>
+          <th>Cote</th>
+          <th>Mots clés</th>
+          <th>Titre</th>
+          <th>Auteurs</th>
+          <th>Date de parution</th>
+          <th>Périodique</th>
+        </thead>
+        <tbody>
+          {% for article in articles %}
+          <tr class="article" onClick="document.location.href='{{ path('article_voir', {'id' : article.id}) }}'">
+            <td><h5>{{ article.cote.nom }}</h5></td>
+            <td><h5>
+              {% if article.motClef %}
+                {% for mot in article.motclef | split(";") %}
+                  {% if loop.index < 2 %}
+                    {{ mot }}
+                  {% elseif loop.index < article.motclef|split(";")|length %}
+                    , {{ mot }}
+                  {% else %}
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+              <i>Pas de mot clé</i>
+              {% endif %}
+
+            </h5></td>
+            <td><h5>{{ article.titre }}</h5></td>
+            <td>
+
+            {% if article.auteur or article.auteur2 or article.auteur2 %}
+              {% if article.auteur %}
+                {{ article.auteur.prenom|first|capitalize}}. {{ article.auteur.nom|capitalize}}
+              {% endif %}
+
+              {% if article.auteur2 %}
+                ,<br />{{ article.auteur2.prenom|first|capitalize}}. {{ article.auteur2.nom|capitalize}}
+              {% endif %}
+
+              {% if article.auteur3 %}
+                ,<br />{{ article.auteur3.prenom|first|capitalize}}. {{ article.auteur3.nom|capitalize}}
+              {% endif %}
+            {% else %}
+              <i>Pas d'auteur</i>
+            {% endif %}
+
+            </td>
+            <td>{{ article.dateParution|date('d/m/Y') }}</td>
+            <td><center>{{ article.periodique.nom }}</center></td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </section>
+    {# Si la recherche ne trouve pas d'articles #}
+    {% else %}
+    <div class="erreur">
+      Aucun article n'a été trouvé dans la base de données.
+    </div>
+    {% endif %}
+  </section>
+
+  {% endblock %}
+
+  {% block javascripts %}
+  <!-- utilisation de jquery DataTable -->
+  <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.3.js">
+  </script>
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js">
+  </script>
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/plug-ins/1.10.12/sorting/datetime-moment.js">
+  </script>
+
+
+  <script type="text/javascript" class="init">
+
+
+
+  $(document).ready(function() {
+    $('#table_recherche').DataTable(
+      {
+        "oLanguage": {
+          "sProcessing":     "Traitement en cours...",
+          "sSearch":         "Filtrer :",
+          "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+          "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+          "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+          "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+          "sInfoPostFix":    "",
+          "sLoadingRecords": "Chargement en cours...",
+          "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+          "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+          "oPaginate": {
+            "sFirst":      "Premier",
+            "sPrevious":   "Pr&eacute;c&eacute;dent",
+            "sNext":       "Suivant",
+            "sLast":       "Dernier"
+          },
+          "oAria": {
+            "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+            "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+          }
+        },
+        columnDefs: [
+          { type: 'date-eu', targets: 4 },
+          { width: '17%', targets: 3 }
+        ]
+      }
+
+    );
+  } );
+
+  jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "date-eu-pre": function ( date ) {
+      date = date.replace(" ", "");
+
+      if ( ! date ) {
+        return 0;
+      }
+
+      var year;
+      var eu_date = date.split("/");
+
+      /*year (optional)*/
+      if ( eu_date[2] ) {
+        year = eu_date[2];
+      }
+      else {
+        year = 0;
+      }
+
+      /*month*/
+      var month = eu_date[1];
+      if ( month.length == 1 ) {
+        month = 0+month;
+      }
+
+      /*day*/
+      var day = eu_date[0];
+
+      if ( day.length == 1 ) {
+        day = 0+day;
+      }
+
+      return (year + month + day) * 1;
+    },
+
+    "date-eu-asc": function ( a, b ) {
+      return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "date-eu-desc": function ( a, b ) {
+      return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+  } );
+
+
+  </script>
+  {% if recherche is defined %}
+  <script>
+  // Recherche et surlignage des mot cherché par l'utilisateur
+  $(document).ready(function() {
+    // pour la barre de recherhce principale
+
+    var mot = ('{{recherche}}');
+    if(mot != null && mot != ""){
+      $("#table_recherche").children().each(function(){
+        $(this).children().each(function(){
+          $(this).children().each(function(){
+            if($(this).html().toLowerCase().indexOf(mot.toLowerCase()) > -1){
+              $(this).html($(this).html().toLowerCase().replace(mot.toLowerCase(), "<mark>"+mot.toLowerCase()+"</mark>"));
+            }
+          });
+        });
+      });
+    }
+    // pour la barre recherche avancée 1
+    var mot = ('{{recherche1}}');
+    if(mot != null && mot != ""){
+      $("#table_recherche").children().each(function(){
+        $(this).children().each(function(){
+          $(this).children().each(function(){
+            if($(this).html().toLowerCase().indexOf(mot.toLowerCase()) > -1){
+              $(this).html($(this).html().toLowerCase().replace(mot.toLowerCase(), "<mark>"+mot.toLowerCase()+"</mark>"));
+            }
+          });
+        });
+      });
+    }
+    // pour la barre recherche avancée 2
+    var mot = ('{{recherche2}}');
+    if(mot != null && mot != ""){
+      $("#table_recherche").children().each(function(){
+        $(this).children().each(function(){
+          $(this).children().each(function(){
+            if($(this).html().toLowerCase().indexOf(mot.toLowerCase()) > -1){
+              $(this).html($(this).html().toLowerCase().replace(mot.toLowerCase(), "<mark>"+mot.toLowerCase()+"</mark>"));
+            }
+          });
+        });
+      });
+    }
+    // pour la barre recherche avancée 3
+    var mot = ('{{recherche3}}');
+    if(mot != null && mot != ""){
+      $("#table_recherche").children().each(function(){
+        $(this).children().each(function(){
+          $(this).children().each(function(){
+            if($(this).html().toLowerCase().indexOf(mot.toLowerCase()) > -1){
+              $(this).html($(this).html().toLowerCase().replace(mot.toLowerCase(), "<mark>"+mot.toLowerCase()+"</mark>"));
+            }
+          });
+        });
+      });
+    }
+  });
+  </script>
+  {% endif %}
+
+
+  <script type="text/javascript">
+  document.getElementById("recherche_avancee").addEventListener("click", function(){
+    // Afficher
+    if(document.getElementById("champs_recherche_avancee").style.display == "none"){
+      document.getElementById("champs_recherche_avancee").style.display = "block";
+      document.getElementById("recherche_avancee").innerHTML = "Fermer la recherche avancée";
+    }
+
+    // Cacher
+    else{
+      document.getElementById("recherche2").value = "";
+      document.getElementById("recherche3").value = "";
+      document.getElementById("recherche4").value = "";
+      document.getElementById("champs_recherche_avancee").style.display = "none";
+      document.getElementById("champs_recherche_avancee2").style.display = "none";
+      document.getElementById("champs_recherche_avancee3").style.display = "none";
+
+      document.getElementById("recherche_avancee").innerHTML = "Recherche avancée ";
+    }
+  });
+
+  //deuxième recherche avancée
+  document.getElementById("recherche_avancee2").addEventListener("click", function(){
+    // Afficher
+    if(document.getElementById("champs_recherche_avancee2").style.display == "none"){
+      document.getElementById("champs_recherche_avancee2").style.display = "block";
+      document.getElementById("recherche_avancee2").innerHTML = "Fermer la recherche avancée 2";
+    }
+
+    // Cacher
+    else{
+      document.getElementById("recherche3").value = "";
+      document.getElementById("recherche4").value = "";
+      document.getElementById("champs_recherche_avancee2").style.display = "none";
+      document.getElementById("champs_recherche_avancee3").style.display = "none";
+      document.getElementById("recherche_avancee2").innerHTML = "Recherche avancée 2";
+    }
+  });
+
+  //troisième recherche avancée
+  document.getElementById("recherche_avancee3").addEventListener("click", function(){
+    // Afficher
+    if(document.getElementById("champs_recherche_avancee3").style.display == "none"){
+      document.getElementById("champs_recherche_avancee3").style.display = "block";
+      document.getElementById("recherche_avancee3").innerHTML = "Fermer la recherche avancée 3";
+    }
+
+    // Cacher
+    else{
+      document.getElementById("recherche4").value = "";
+      document.getElementById("champs_recherche_avancee3").style.display = "none";
+
+      document.getElementById("recherche_avancee3").innerHTML = "Recherche avancée 3";
+    }
+  });
+  </script>
+  {% endblock %}

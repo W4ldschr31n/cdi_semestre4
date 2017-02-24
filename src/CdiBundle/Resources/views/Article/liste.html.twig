@@ -1,0 +1,210 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+<style type="text/css" class="init">
+
+</style>
+
+
+<style>
+ul{
+  list-style: none;
+  padding: 0;
+}
+
+.tableauxArticle {
+  width : 100%;
+}
+
+.article{
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  background-color: #E8E8E8;
+  color: black;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.article h5{
+  text-transform: uppercase;
+  padding-left : 10px;
+  color: black;
+}
+
+.article:hover{
+  background-color: #D9D9D9;
+  cursor:  pointer;
+}
+
+.article p{
+  font-size: 12px;
+  margin: 0;
+  margin-top: 4px;
+}
+
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<!-- utilisation de jquery DataTable -->
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.3.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+
+<script type="text/javascript" class="init">
+
+
+$(document).ready(function() {
+  $('#table').DataTable(
+      {
+        "oLanguage": {
+        	"sProcessing":     "Traitement en cours...",
+        	"sSearch":         "Rechercher :",
+            "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+        	"sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        	"sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+        	"sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        	"sInfoPostFix":    "",
+        	"sLoadingRecords": "Chargement en cours...",
+            "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        	"sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+        	"oPaginate": {
+        		"sFirst":      "Premier",
+        		"sPrevious":   "Pr&eacute;c&eacute;dent",
+        		"sNext":       "Suivant",
+        		"sLast":       "Dernier"
+        	},
+        	"oAria": {
+        		"sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+        		"sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+        	}
+        },
+        columnDefs: [
+          { type: 'date-eu', targets: 4 },
+          { width: '17%', targets: 3 }
+        ]
+      }
+
+  );
+} );
+
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+  "date-eu-pre": function ( date ) {
+    date = date.replace(" ", "");
+
+    if ( ! date ) {
+      return 0;
+    }
+
+    var year;
+    var eu_date = date.split("/");
+
+    /*year (optional)*/
+    if ( eu_date[2] ) {
+      year = eu_date[2];
+    }
+    else {
+      year = 0;
+    }
+
+    /*month*/
+    var month = eu_date[1];
+    if ( month.length == 1 ) {
+      month = 0+month;
+    }
+
+    /*day*/
+    var day = eu_date[0];
+
+    if ( day.length == 1 ) {
+      day = 0+day;
+    }
+
+    return (year + month + day) * 1;
+  },
+
+  "date-eu-asc": function ( a, b ) {
+    return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+  },
+
+  "date-eu-desc": function ( a, b ) {
+    return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+  }
+} );
+
+</script>
+{% endblock %}
+
+{% block body %}
+
+
+
+<section id="contenu">
+
+  <h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > {{ 'Gestion des articles'|upper }}</h2>
+
+  <table class="display" id="table">
+    <thead>
+      <tr>
+        <th>Cote</th>
+        <th>Mots clés</th>
+        <th>Titre</th>
+        <th>Auteurs</th>
+        <th>Date de parution</th>
+        <th>Périodique</th>
+      </thead>
+      <tbody>
+        {% for article in articles %}
+        <tr class="article" onClick="document.location.href='{{ path('article_voir', {'id' : article.id}) }}'">
+          <td><h5>{{ article.cote.nom }}</h5></td>
+          <td><h5>
+            {% if article.motClef %}
+              {% for mot in article.motclef | split(";") %}
+                {% if loop.index < 2 %}
+                  {{ mot }}
+                {% elseif loop.index < article.motclef|split(";")|length %}
+                  , {{ mot }}
+                {% else %}
+                {% endif %}
+              {% endfor %}
+            {% else %}
+            <i>Pas de mot clé</i>
+            {% endif %}
+
+          </h5></td>
+          <td><h5>{{ article.titre }}</h5></td>
+          <td>
+
+          {% if article.auteur or article.auteur2 or article.auteur2 %}
+            {% if article.auteur %}
+              {{ article.auteur.prenom|first|capitalize}}. {{ article.auteur.nom|capitalize}}
+            {% endif %}
+
+            {% if article.auteur2 %}
+              ,<br />{{ article.auteur2.prenom|first|capitalize}}. {{ article.auteur2.nom|capitalize}}
+            {% endif %}
+
+            {% if article.auteur3 %}
+              ,<br />{{ article.auteur3.prenom|first|capitalize}}. {{ article.auteur3.nom|capitalize}}
+            {% endif %}
+          {% else %}
+            <i>Pas d'auteur</i>
+          {% endif %}
+
+          </td>
+          <td>{{ article.dateParution|date('d/m/Y') }}</td>
+          <td><center>{{ article.periodique.nom }}</center></td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+
+</section>
+
+
+{% endblock %}

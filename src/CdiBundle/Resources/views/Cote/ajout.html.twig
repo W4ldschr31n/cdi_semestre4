@@ -1,0 +1,40 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        table {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > {{ 'Ajout d\'une cote'|upper }}</h2>
+    <section class="section">
+        <h4 style="margin: 0; text-transform: uppercase;">Informations de la nouvelle cote :</h4>
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <table>
+                <tr>
+                    <td>
+                        {# Nom de la cote #}
+                        {{ form_label(form.nom, "Nom de la cote :") }}
+                    </td>
+                    <td>
+                        {{ form_widget(form.nom, {'attr': {'placeholder': 'Nom'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br/>
+                        {# Submit button #}
+                        {{ form_widget(form.ajout, {'label': 'Enregistrer la cote'}) }}
+                    </td>
+                </tr>
+            </table>
+
+            {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

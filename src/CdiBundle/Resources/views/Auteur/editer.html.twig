@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        table {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > <a href="{{ path('auteur_liste') }}">Gestion des auteurs</a> > {{ 'édition d\'un auteur'|upper }}</h2>
+    <section class="section">
+        <h4 style="margin: 0; text-transform: uppercase;">Édition de l'auteur :</h4>
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <table>
+                <tr>
+                    <td>
+                        {# Prénom de l'auteur #}
+                        {{ form_label(form.prenom, "Prénom de l'auteur :") }}
+                    </td>
+                    <td>
+                        {{ form_widget(form.prenom, {'attr': {'placeholder': 'Prénom'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {# Nom de l'auteur #}
+                        {{ form_label(form.nom, "Nom de l'auteur :") }}
+                    </td>
+                    <td>
+                        {{ form_widget(form.nom, {'attr': {'placeholder': 'Nom'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br/>
+                        {# Submit button #}
+                        {{ form_widget(form.ajout, {'label': 'Modifier l\'auteur'}) }}
+                    </td>
+                </tr>
+            </table>
+
+            {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

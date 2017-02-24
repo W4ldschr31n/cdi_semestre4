@@ -1,0 +1,44 @@
+accueil:
+    path: /
+    defaults: { _controller: AppBundle:Default:index }
+
+contact:
+    path: /contact
+    defaults: { _controller: AppBundle:Default:contact }
+
+propos:
+    path: /propos
+    defaults: { _controller: AppBundle:Default:propos }
+
+administration:
+    path: /admin
+    defaults: { _controller: AppBundle:Default:administration }
+
+connexion:
+    path: /connexion
+    defaults: { _controller: AppBundle:User:connexion }
+
+deconnexion:
+   path: /deconnexion
+   defaults: { _controller: AppBundle:User:deconnexion }
+
+redirection_accueil:
+    path: /redirection
+    defaults: { _controller: AppBundle:User:redirect }
+
+# Routes pour les requêtes AJAX
+ajax_recherche_auteur:
+    path: /ajax/recherche/auteur/{prenom}/{nom}
+    defaults: { _controller: AppBundle:Ajax:rechercheAuteur }
+
+ajax_recherche_periodique:
+    path: /ajax/recherche/periodique/{nom}
+    defaults: { _controller: AppBundle:Ajax:recherchePeriodique }
+
+ajax_recherche_cote:
+    path: /ajax/recherche/cote/{nom}
+    defaults: { _controller: AppBundle:Ajax:rechercheCote }
+
+ajax_recherche_motClef:
+  path: /ajax/recherche/motClef/{motClef}
+  defaults: { _controller: AppBundle:Ajax:rechercheMotClef }

@@ -1,0 +1,202 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway';
+}
+
+/* ajout pour "Centre de Documentation" */
+h1{
+  position: relative;
+  left: 200px;
+  top: -10px;
+  display: inline-block;
+  font-size: 25px;
+  color: #FFF;
+}
+
+a{
+    text-decoration: none;
+}
+
+#contenu{
+    width: 1000px;
+    margin: auto;
+}
+
+header{
+    background-color: #4e678b;
+    height: 100px;
+    width: 100%;
+}
+
+#inner-header{
+    width: 1000px;
+    margin: auto;
+}
+
+#logo{
+    position: relative;
+    top: 14px;
+    display: inline-block;
+}
+
+nav{
+    display: inline-block;
+    color: white;
+    float: right;
+}
+
+nav ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li{
+    display: inline-block;
+    margin: 0 0 0 30px;
+    padding: 0;
+    line-height: 100px;
+    width: 75px;
+    text-align: center;
+}
+
+nav a{
+    color: white;
+    font-size: 12px;
+}
+
+nav a:hover{
+    font-weight: bold;
+}
+
+#user{
+    height: 50px;
+    margin: 0;
+    width: 100%;
+    background-color: #33445c;
+}
+
+#inner-user{
+    width: 1000px;
+    margin: auto;
+}
+
+#user a{
+    color: white;
+    line-height: 50px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#user a:hover{
+    color: #EEEEEE;
+}
+
+#photo_profil{
+    margin-left: 15px;
+    width: 25px;
+    height: 25px;
+    border-radius: 12.5px;
+    display: inline-block;
+    position: relative;
+    top: 7px;
+}
+
+#nom_profil{
+    display: inline-block;
+    color: white;
+    font-size: 13px;
+    margin-left: 15px;
+    line-height: 25px;
+    text-transform: none;
+}
+
+.deconnexion {
+    display: inline-block;
+    position: relative;
+    float: right;
+    margin-right: -310px;
+}
+
+/* PAGE */
+.section{
+    width: 100%;
+    background-color: #E8E8E8;
+    padding: 20px;
+    margin-top: 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.fil_ariane{
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 25px;
+    margin-top: 25px;
+}
+
+.fil_ariane a{
+    color: #4e678b;
+    font-size: 13px;
+}
+
+.erreur{
+    width: 100%;
+    padding: 10px 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    color: white;
+    background-color: #AD3D44;
+    font-size: 13px;
+}
+
+/* FORUMLAIRES */
+
+input[type="text"]{
+    height: 30px;
+    border: 2px solid #4e678b;
+    padding-left: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+textarea{
+    border: 2px solid #4e678b;
+    padding: 0 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-top: 5px;
+}
+
+input[type="submit"], button[type="submit"]{
+    background-color: #4e678b;
+    border: none;
+    color: white;
+    padding: 7px 12px 7px 12px;
+    height: 30px;
+}
+
+input[type="submit"]:hover, button[type="submit"]:hover{
+    cursor: pointer;
+    background-color: #34455E;
+}
+
+.recherche_avancee{
+    text-decoration: underline;
+    color: #4e678b;
+    font-size: 12px;
+    display: inline-block;
+    float: right;
+}
+
+.recherche_avancee:hover{
+    cursor: pointer;
+    font-style: italic;
+}

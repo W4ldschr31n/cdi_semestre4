@@ -1,0 +1,134 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/base.css') }}"/>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<style>
+#bouton {
+  border: 2px solid #4e678b;
+  border-radius: 3px;
+  background-color: white;
+  padding: 5px;
+  color: #4e678b;
+  font-weight: bold;
+  cursor: pointer;
+  width: 170px;
+  margin-left: 20px;
+}
+
+#bouton:hover {
+  background-color: #4e678b;
+  color: white;
+}
+
+#dialog {
+  display: none;
+  background-color: white;
+}
+
+#dialog button {
+  border: 2px solid #4e678b;
+  border-radius: 3px;
+  background-color: white;
+  padding: 2px;
+  color: #4e678b;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+#dialog button:hover {
+  background-color: #4e678b;
+  color: white;
+}
+
+.motClef {
+  font-size: 13px;
+  display: inline-block;
+  text-decoration: underline;
+}
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script>
+$(function() {
+
+  $('.supprimer').each(function(index) {
+    var lien = $(".supprimer_a").attr('href');
+
+    $(this).click(function(event){
+      event.preventDefault();
+      $('#dialog').dialog();
+
+      $('.non').click(function() {
+        $('#dialog').dialog('destroy');
+      });
+
+      $('.oui').click(function() {
+        document.location.href = lien;
+      });
+    });
+
+  });
+
+});
+</script>
+{% endblock %}
+
+{% block body %}
+{% if app.session.get('status') is defined and app.session.get('status') == 'documentaliste' or app.session.get('status') == 'administrateur' %}
+<h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > <a href="{{ path('article_liste') }}"> Gestion des articles</a> > {{ 'Fiche article'|upper }}</h2>
+{% else %}
+<h2 class="fil_ariane"><a href="{{ path('accueil') }}">Accueil</a> > FICHE ARTICLE</h2>
+{% endif %}
+<section class="section">
+  <h4 style="margin: 0; text-transform: uppercase;">{{ article.titre }}</h4>
+  <p style="font-size: 13px;">
+    <!-- Lien liste article d'un périodique -->
+    Le {{ article.dateParution|date('d/m/Y') }} dans <a href="{{ path('article_listeArticlePeriodique', {'periodique' : article.periodique.nom }) }}" style="color: #4e678b; font-style: italic; font-weight: bold;">{{ article.periodique.nom }}</a>, n°{{ article.numeroPeriodique }}.
+    {% if article.auteur %}
+    Par <a href="{{ path('article_listeArticleAuteur', {'prenom' : article.auteur.prenom|capitalize, 'nom' : article.auteur.nom|upper }) }}" style="color: #4e678b; font-style: italic; font-weight: bold;">{{ article.auteur.prenom|capitalize }} {{ article.auteur.nom|upper }}</a>.
+    {% endif %}
+  </p>
+  <p style="font-size: 13px;">
+    <!-- Les mot clef de l'article si il en a -->
+    {% if article.motClef %}
+    Cette article a pour mot clef :
+    {% for mot in article.motclef | split(";") %}
+    {% if loop.index < 2 %}
+    <p class="motClef"> {{ mot }}</p>
+    {% elseif loop.index < article.motclef|split(";")|length %}
+    <p style="font-size: 13px;display:inline-block">, </p> <p class="motClef">{{ mot }}</p>
+    {% else %}
+    .
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+    </p>
+    <p>{{ article.resume }}</p>
+    {% if article.pageDebut != "" and article.pageFin == "" %}
+    <i style="font-size: 12px;">Page {{ article.pageDebut }}</i>
+    {% elseif article.pageDebut != "" and article.pageDebut == article.pageFin %}
+    <i style="font-size: 12px;">Page {{ article.pageDebut }}</i>
+    {% elseif article.pageFin != "" %}
+    <i style="font-size: 12px;">De la page {{ article.pageDebut }} à la page {{ article.pageFin }}</i>
+    {% endif %}
+  </section>
+  <div style="padding: 20px; float: right;">
+    {% if app.session.get('status') is defined and app.session.get('status') == 'documentaliste' or app.session.get('status') == 'administrateur' %}
+    <a href="{{ path('article_editer', {"id": article.id}) }}"><button id="bouton">Éditer</button></a>
+    <a class="supprimer_a" href="{{ path('article_supprimer', {"id": article.id}) }}" ><button id="bouton" class="supprimer">Supprimer</button><a/>
+      {% endif %}
+      <div id="dialog" title="Suppression">
+        <p>Voulez-vous vraiment supprimer cet Article ?</p>
+        <button class="non">Non</button>
+        <button class="oui">Oui</button>
+      </div>
+    </div>
+    <div style="padding: 20px; float: left;">
+      <a onclick="window.history.go(-1); return false;"><button id="bouton">Retour à la recherche</button></a>
+    </div>
+    {% endblock %}

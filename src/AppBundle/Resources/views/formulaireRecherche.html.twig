@@ -1,0 +1,202 @@
+
+{% block stylesheets %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock %}
+
+<form method="post" action="{{ path('article_recherche') }}">
+  <div style = "padding : 5px 5px 5px 5px; " >
+    <select class="date" id="date" name="dateSearchType" onchange="affichage();">
+      <option value="0" selected>Recherche sans date </option>
+      <option value="1">Depuis </option>
+      <option value="2">Jusqu'au </option>
+      <option value="3">Entre </option>
+    </select>
+    <div id="dateDebutDiv" style="display : inline-block; margin-left : 10px">
+      <label id="dateDebutTxt">Depuis le :</label>
+      <input
+        type="text"
+        class="datepicker"
+        id="dateDeb"
+        name="dateDebut"
+        placeholder="JJ/MM/AAAA"
+        pattern="\d{1,2}/\d{1,2}/\d{4}"
+        style="height: 33px; width: 100px; padding: 0 0 0 15px; margin: 5px 0 0 0; border: none;"
+        />
+    </div>
+
+    <div id="dateFinDiv" style="display : inline-block;  margin-left : 10px">
+      <label id="dateFinTxt">Date :</label>
+      <input
+        type="text"
+        class="datepicker"
+        id="dateFin"
+        name="dateFin"
+        placeholder="JJ/MM/AAAA"
+        pattern="\d{1,2}/\d{1,2}/\d{4}"
+        style="height: 33px; width: 100px; padding: 0 0 0 15px; margin: 5px 0 0 0; border: none;"
+         />
+    </div>
+  </div>
+<br />
+
+  <input
+    type="text"
+    id="recherche1"
+    value=""
+    name="recherche"
+    placeholder="Votre mot clé, titre, expression, etc"
+    style="height: 33px; width: 400px; padding-left: 15p; margin: 0; border: none;"
+  />
+  dans
+  <select name="type">
+    <option value="tousChamps">Tous les champs</option>
+    <option value="titre">Titre de l'article</option>
+    <option value="auteur">Nom de l'auteur</option>
+    <option value="periodique">Nom du périodique</option>
+    <option value="cote">Cote de l'article</option>
+    <option value="motclef">Mot clef de l'article</option>
+  </select>
+  <input type="submit" value="Rechercher"/>
+
+  <!-- recherche avancée 1 -->
+  <p class="recherche_avancee" id="recherche_avancee">Recherche avancée</p>
+  <br/><br/>
+  <div class="separation_bas" id="champs_recherche_avancee" style="display: none;">
+    <select name="operateur">
+      <option value="et">ET</option>
+      <option value="ou">OU</option>
+      <option value="sauf">SAUF</option>
+    </select><br/><br/>
+    <input
+      type="text"
+      id="recherche2"
+      value=""
+      name="rechercheAvancee"
+      placeholder="Votre mot clé, titre, expression, etc"
+      style="height: 33px; width: 400px; padding: 0 0 0 15px;margin: 0; border: none;"
+      />
+    dans
+    <select name="typeAvancee">
+      <option value="tousChamps">Tous les champs</option>
+      <option value="titre">Titre de l'article</option>
+      <option value="auteur">Nom de l'auteur</option>
+      <option value="periodique">Nom du périodique</option>
+      <option value="cote">Cote de l'article</option>
+      <option value="motclef">Mot clef de l'article</option>
+    </select>
+    <p class="recherche_avancee" id="recherche_avancee2">Recherche avancée 2</p>
+  </div>
+
+  <!-- recherche avancée 2 -->
+  <div class="separation_bas" id="champs_recherche_avancee2" style="display: none;">
+    <br/>
+    <select name="operateur2">
+      <option value="et">ET</option>
+      <option value="ou">OU</option>
+      <option value="sauf">SAUF</option>
+    </select><br/><br/>
+    <input
+      type="text"
+      id="recherche3"
+      value=""
+      name="rechercheAvancee2"
+      placeholder="Votre mot clé, titre, expression, etc"
+      style="height: 33px; width: 400px; padding: 0 0 0 15px;margin: 0; border: none;"
+      />
+    dans
+    <select name="typeAvancee2">
+      <option value="tousChamps">Tous les champs</option>
+      <option value="titre">Titre de l'article</option>
+      <option value="auteur">Nom de l'auteur</option>
+      <option value="periodique">Nom du périodique</option>
+      <option value="cote">Cote de l'article</option>
+      <option value="motclef">Mot clef de l'article</option>
+    </select>
+    <p class="recherche_avancee" id="recherche_avancee3">Recherche avancée 3</p>
+  </div>
+
+  <!-- recherche avancée 3 -->
+  <div class="separation_bas" id="champs_recherche_avancee3" style="display: none;">
+    <br/>
+    <select name="operateur3">
+      <option value="et">ET</option>
+      <option value="ou">OU</option>
+      <option value="sauf">SAUF</option>
+    </select><br/><br/>
+    <input
+      type="text"
+      id="recherche4"
+      value=""
+      name="rechercheAvancee3"
+      placeholder="Votre mot clé, titre, expression, etc"
+      style="height: 33px; width: 400px; padding: 0 0 0 15px;margin: 0; border: none;"
+      />
+    dans
+    <select name="typeAvancee3">
+      <option value="tousChamps">Tous les champs</option>
+      <option value="titre">Titre de l'article</option>
+      <option value="auteur">Nom de l'auteur</option>
+      <option value="periodique">Nom du périodique</option>
+      <option value="cote">Cote de l'article</option>
+      <option value="motclef">Mot clef de l'article</option>
+    </select>
+  </div>
+</form>
+{% block javascripts %}
+
+
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+var jQuery_1_12_1 = $.noConflict(true);
+
+jQuery_1_12_1(document).ready(function(){
+  jQuery_1_12_1("#dateFinDiv").hide();
+  jQuery_1_12_1("#dateDebutDiv").hide();
+  jQuery_1_12_1("#date option[value='0']").prop('selected', true);
+
+  jQuery_1_12_1("#date").change(function(){
+    var idSearchDate = jQuery_1_12_1("#date").val();
+
+    if(idSearchDate >= 3){
+      jQuery_1_12_1("#dateFinDiv").show();
+      jQuery_1_12_1("#dateDebutDiv").show();
+      jQuery_1_12_1("#dateDebutTxt").html("le : ");
+      jQuery_1_12_1("#dateFinTxt").html("et le : ");
+    } else if(idSearchDate != 0) {
+      jQuery_1_12_1("#dateFinDiv").hide();
+      jQuery_1_12_1("#dateDebutDiv").show();
+      if(idSearchDate == 1){
+        jQuery_1_12_1("#dateDebutTxt").html("le : ");
+      } else if(idSearchDate == 2){
+        jQuery_1_12_1("#dateDebutTxt").html("");
+      }
+    } else {
+      jQuery_1_12_1("#dateFinDiv").hide();
+      jQuery_1_12_1("#dateDebutDiv").hide();
+    }
+  });
+
+  jQuery(jQuery_1_12_1(function() {
+    jQuery_1_12_1(".datepicker").datepicker({
+      altField: "#datepicker",
+      closeText: 'Fermer',
+      prevText: 'Précédent',
+      nextText: 'Suivant',
+      currentText: 'Aujourd\'hui',
+      monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+      monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+      dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+      dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+      dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+      weekHeader: 'Sem.',
+      dateFormat: 'dd/mm/yy'
+    })
+  }));
+});
+
+
+
+</script>
+{% endblock %}

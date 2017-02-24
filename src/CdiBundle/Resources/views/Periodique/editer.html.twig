@@ -1,0 +1,64 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <style>
+        .form-field{
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        label{
+            display: inline-block;
+            font-size: 13px;
+            vertical-align: middle;
+            min-width: 150px;
+        }
+
+        textarea{
+            vertical-align: top;
+        }
+
+        i{
+            display: block;
+            font-size: 12px;
+        }
+
+       #valider{
+            text-align: right;
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > <a href="{{ path('periodique_liste') }}">Gestion des périodiques</a> > {{ 'édition d\'un périodique'|upper }}</h2>
+    <section class="section">
+
+        <h4 style="margin: 0; text-transform: uppercase;">Nom du périodique :</h4>
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            <table>
+                <tr>
+                    <td>
+                        {# Nom du périodique #}
+                        {{ form_label(form.nom, "Nom du périodique :") }}
+                    </td>
+                    <td>
+                        {{ form_widget(form.nom, {'attr': {'placeholder': 'Nom'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br/>
+                        {# Submit button #}
+                        {{ form_widget(form.ajout, {'label': 'Modifier le périodique'}) }}
+                    </td>
+                </tr>
+            </table>
+
+            {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

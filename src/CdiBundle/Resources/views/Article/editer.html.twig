@@ -1,0 +1,99 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <style>
+        .form-field{
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        label{
+            display: inline-block;
+            font-size: 13px;
+            vertical-align: middle;
+            min-width: 150px;
+        }
+
+        textarea{
+            vertical-align: top;
+        }
+
+        i{
+            display: block;
+            font-size: 12px;
+        }
+
+       #valider{
+            text-align: right;
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > <a href="{{ path('article_liste') }}">Gestion des articles</a> > {{ 'édition d\'un article'|upper }}</h2>
+    <section class="section">
+
+        <h4 style="margin: 0; text-transform: uppercase;">Informations de l'article :</h4>
+        <p style="font-size: 13px; margin-bottom: 35px;">Modifiez les informations de l'article.</p>
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {# Titre #}
+            <div class="form-field">
+                {{ form_label(form.titre, 'Titre :') }}
+                {{ form_widget(form.titre, {'attr': {'placeholder': 'Titre'}}) }}
+            </div>
+
+            {# Résumé #}
+            <div class="form-field">
+                {{ form_label(form.resume, 'Résumé :') }}
+                {{ form_widget(form.resume, {'attr': {'placeholder': 'Résumé', 'rows': '7', 'cols': '50'}}) }}
+            </div>
+
+            {# Date de parution #}
+            <div class="form-field">
+                {{ form_label(form.dateParution, 'Date de parution :') }}
+                {{ form_widget(form.dateParution, { 'attr': {'class': 'calendar', 'placeholder': 'JJ/MM/AAAA'} }) }}
+            </div>
+
+            {# Numéro du périodique #}
+            <div class="form-field">
+                {{ form_label(form.numeroPeriodique, 'Numéro du périodique :') }}
+                {{ form_widget(form.numeroPeriodique, { 'attr': {'placeholder': 'Numéro du périodique'} }) }}
+            </div>
+
+            {# Page de début #}
+            <div class="form-field">
+                {{ form_label(form.pageDebut, 'Page de début :') }}
+                {{ form_widget(form.pageDebut, { 'attr': {'placeholder': 'Page de début'} }) }}
+            </div>
+
+            {# Page de fin #}
+            <div class="form-field">
+                {{ form_label(form.pageFin, 'Page de fin (*) :') }}
+                {{ form_widget(form.pageFin, { 'attr': {'placeholder': 'Page de fin'} }) }}
+            </div>
+
+            <i>(*) : Champs facultatifs</i>
+
+            {# Bouton valider #}
+            <div id="valider">
+                {{ form_widget(form.save, { 'label': "Modifier l'article" }) }}
+            </div>
+        {{ form_end(form) }}
+        </p>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $(".calendar").datepicker({ dateFormat: "dd/mm/yy" });
+            $(".calendar").attr("type", "text");
+          });
+    </script>
+{% endblock %}

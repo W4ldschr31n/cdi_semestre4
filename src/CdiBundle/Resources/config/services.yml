@@ -1,0 +1,4 @@
+services:
+#    cdi.example:
+#        class: CdiBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]

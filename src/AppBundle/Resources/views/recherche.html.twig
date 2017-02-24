@@ -1,0 +1,91 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/base.css') }}"/>
+{% endblock %}
+
+{% block body %}
+<section id="contenu">
+  <h2 class="fil_ariane"><a href="#">Accueil</a> > RECHERCHE</h2>
+  <section class="section" style="margin-bottom: 40px; position: relative; top: -10px;">
+    <h3 style="margin: 0; font-size: 14px; font-weight: normal; text-transform: uppercase; margin-bottom: 5px; margin-top: -10px;">Recherche :</h3>
+    {% include 'AppBundle::formulaireRecherche.html.twig' %}
+  </section>
+</section>
+
+<script type="text/javascript">
+document.getElementById("date").onchange = function() {affichage()};
+
+function affichage(){
+  if(document.getElementById("date").options[choice].value == "entre"){
+    document.getElementById("date_affichage").style.display = "block";
+  }
+  // Cacher
+  else{
+    document.getElementById("date_affichage").style.display = "none";
+  }
+}
+
+document.getElementById("recherche_avancee").addEventListener("click", function(){
+  // Afficher
+  if(document.getElementById("champs_recherche_avancee").style.display == "none"){
+    document.getElementById("champs_recherche_avancee").style.display = "block";
+    document.getElementById("recherche_avancee").innerHTML = "Fermer la recherche avancée";
+  }
+
+  // Cacher
+  else{
+    document.getElementById("recherche2").value = "";
+    document.getElementById("recherche3").value = "";
+    document.getElementById("recherche4").value = "";
+    document.getElementById("recherche4").value = "";
+
+    document.getElementById("champs_recherche_avancee").style.display = "none";
+    document.getElementById("champs_recherche_avancee2").style.display = "none";
+    document.getElementById("champs_recherche_avancee3").style.display = "none";
+
+    document.getElementById("recherche_avancee").innerHTML = "Recherche avancée ";
+    document.getElementById("recherche_avancee2").innerHTML = "Recherche avancée 2";
+    document.getElementById("recherche_avancee3").innerHTML = "Recherche avancée 3";
+  }
+});
+
+//deuxième recherche avancée
+document.getElementById("recherche_avancee2").addEventListener("click", function(){
+  // Afficher
+  if(document.getElementById("champs_recherche_avancee2").style.display == "none"){
+    document.getElementById("champs_recherche_avancee2").style.display = "block";
+    document.getElementById("recherche_avancee2").innerHTML = "Fermer la recherche avancée 2";
+  }
+
+  // Cacher
+  else{
+    document.getElementById("recherche3").value = "";
+    document.getElementById("recherche4").value = "";
+
+    document.getElementById("champs_recherche_avancee2").style.display = "none";
+    document.getElementById("champs_recherche_avancee3").style.display = "none";
+
+    document.getElementById("recherche_avancee2").innerHTML = "Recherche avancée 2";
+    document.getElementById("recherche_avancee3").innerHTML = "Recherche avancée 3";
+
+  }
+});
+
+//troisième recherche avancée
+document.getElementById("recherche_avancee3").addEventListener("click", function(){
+  // Afficher
+  if(document.getElementById("champs_recherche_avancee3").style.display == "none"){
+    document.getElementById("champs_recherche_avancee3").style.display = "block";
+    document.getElementById("recherche_avancee3").innerHTML = "Fermer la recherche avancée 3";
+  }
+
+  // Cacher
+  else{
+    document.getElementById("recherche4").value = "";
+    document.getElementById("champs_recherche_avancee3").style.display = "none";
+    document.getElementById("recherche_avancee3").innerHTML = "Recherche avancée 3";
+  }
+});
+</script>
+{% endblock %}

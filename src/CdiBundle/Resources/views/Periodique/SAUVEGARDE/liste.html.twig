@@ -1,0 +1,86 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/liste.css') }}"/>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <style>
+        #dialog {
+            display: none;
+        }
+
+        #dialog button {
+            border: 2px solid #4e678b;
+            border-radius: 3px;
+            background-color: white;
+            padding: 2px;
+            color: #4e678b;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+        
+        #dialog button:hover {
+            background-color: #4e678b;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script>
+        $(function() {
+
+            $('.supprimer').each(function(index) {
+                var lien = $(this).attr('href');
+
+                $(this).click(function(event){
+                    event.preventDefault();
+                    $('#dialog').dialog();
+
+                    $('.non').click(function() {
+                        $('#dialog').dialog('destroy');
+                    });
+
+                    $('.oui').click(function() {
+                        document.location.href = lien;
+                    });
+                });
+
+            });
+                
+        });
+  </script>
+{% endblock %}
+
+{% block body %}
+    <h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > LISTE DES PERIODIQUES</h2>
+    <section class="section">
+        {# Si il y a des périodiques, on les affiches, sinon on affiche un message d'erreur. #}
+        {% if periodiques %}
+            <table style="margin: auto;" class="info-table">
+                <tr>
+                    <th>
+                        Nom
+                    </th>
+                </tr>
+                {% for periodique in periodiques %}
+                    <tr>
+                        <td style="min-width: 200px;">{{ periodique.nom }}</td>
+                        <td><a href="{{ path('periodique_editer', {"id": periodique.id}) }}"><img style="width: 15px; height: 15px;" src="{{ asset('img/edit_icon.png') }}" alt="Editer le periodique"/></a></td>
+                        <td><a class="supprimer" href="{{ path('periodique_supprimer', {"id": periodique.id}) }}"><img style="width: 15px; height: 15px;" src="{{ asset('img/delete_icon.png') }}" alt="Supprimer le periodique"/></a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="erreur">Aucun périodique dans la base de données.</div>
+        {% endif %}
+        <div id="dialog" title="Suppression">
+            <p>Si vous supprimez ce périoqique, tous les articles qui lui sont affiliés seront eux aussi supprimés.</p>
+            <p>Voulez-vous vraiment supprimer ce Périodique ?</p>
+            <button class="non">Non</button>
+            <button class="oui">Oui</button>
+        </div>
+    </section>
+{% endblock %}

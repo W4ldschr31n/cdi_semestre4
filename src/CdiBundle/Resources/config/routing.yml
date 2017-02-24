@@ -1,0 +1,149 @@
+# Routing pour la gestion des auteurs
+auteur_liste:
+    path: /admin/auteurs
+    defaults: { _controller: CdiBundle:Auteur:liste }
+
+auteur_ajout:
+    path: /admin/auteur/ajout
+    defaults: { _controller: CdiBundle:Auteur:ajout}
+
+auteur_supprimer:
+    path: /admin/auteur/supprimer/{id}_{idRemplacement}
+    defaults: { _controller: CdiBundle:Auteur:supprimer }
+    requirements:
+        id: \d+
+
+auteur_editer:
+    path: /admin/auteur/{id}/auteur_editer
+    defaults: { _controller: CdiBundle:Auteur:editer }
+    requirements:
+        id: \d+
+
+# Routing pour la gestion des périodiques
+periodique_liste:
+    path: /admin/periodiques
+    defaults: { _controller: CdiBundle:Periodique:liste }
+
+periodique_ajout:
+    path: /admin/periodique/ajout
+    defaults: { _controller: CdiBundle:Periodique:ajout}
+
+periodique_supprimer:
+    path: /admin/periodique/supprimer/{id}_{idRemplacement}
+    defaults: { _controller: CdiBundle:Periodique:supprimer }
+    requirements:
+        id: \d+
+
+periodique_editer:
+    path: /admin/periodique/{id}/editer
+    defaults: { _controller: CdiBundle:Periodique:editer }
+    requirements:
+        id: \d+
+
+
+
+
+#routing pour la gestion des cotes
+cote_liste:
+    path: /admin/cotes
+    defaults: { _controller: CdiBundle:Cote:liste }
+
+cote_ajout:
+    path: /admin/cote/ajout
+    defaults: { _controller: CdiBundle:Cote:ajout}
+
+cote_supprimer:
+    path: /admin/cote/supprimer/{id}_{idRemplacement}
+    defaults: { _controller: CdiBundle:Cote:supprimer }
+    requirements:
+        id: \d+
+
+cote_editer:
+    path: /admin/cote/{id}/cote_editer
+    defaults: { _controller: CdiBundle:Cote:editer }
+    requirements:
+        id: \d+
+
+
+# Routing pour la gestion des articles
+article_voir:
+    path: /article/{id}
+    defaults: { _controller: CdiBundle:Article:voir }
+    requirements:
+        id: \d+
+
+article_liste:
+    path: /admin/articles/{page}
+    defaults: { _controller: CdiBundle:Article:liste, page: null }
+    requirements:
+        page: \d+
+
+        #routage listeArticle pour un périodique
+article_listeArticlePeriodique:
+    path: /admin/articles/listeArticlePeriodique/{periodique}
+    defaults: { _controller: CdiBundle:Article:listeArticlePeriodique}
+
+    #routage listeArticle pour un auteur
+article_listeArticleAuteur:
+  path: /admin/articles/listeArticleAuteur/{prenom}_{nom}
+  defaults: { _controller: CdiBundle:Article:listeArticleAuteur}
+
+article_listeArticleCote:
+  path: /admin/articles/listeArticleCote/{nom}
+  defaults: { _controller: CdiBundle:Article:listeArticleCote}
+
+
+
+
+#article_ajout_auteur:
+#    path: /admin/article/ajout/auteur
+#    defaults: { _controller: CdiBundle:Article:ajoutAuteur }
+
+#article_ajout_periodique:
+#    path: /admin/article/ajout/periodique
+#    defaults: { _controller: CdiBundle:Article:ajoutPeriodique }
+
+article_ajout_informations:
+    path: /admin/article/ajout/informations
+    defaults: { _controller: CdiBundle:Article:ajoutInformations }
+
+article_ajout:
+    path: /admin/article/ajout
+    defaults: { _controller: CdiBundle:Article:ajout }
+
+article_supprimer:
+    path: /admin/article/{id}/supprimer
+    defaults: { _controller: CdiBundle:Article:supprimer }
+    requirements:
+        id: \d+
+
+article_editer:
+    path: /admin/article/{id}/editer
+    defaults: { _controller: CdiBundle:Article:editer }
+    requirements:
+        id: \d+
+
+
+# Routing pour la recherche
+article_recherche:
+    path: /recherche/resultats
+    defaults: { _controller: CdiBundle:Article:recherche }
+    requirements:
+        _method:  POST
+
+# Routing PDF
+pdf_generation:
+    path: /admin/Pdf/generationInterface
+    defaults: { _controller: CdiBundle:Pdf:generationInterface }
+
+article_pdf:
+  path: /admin/article/{id}
+  defaults: { _controller: CdiBundle:Article:pdf }
+  requirements:
+      id: \d+
+
+dossier_pdf:
+  path: /admin/articlesPdf
+  defaults: { _controller: CdiBundle:Article:dossier }
+  requirements:
+      _method:  POST

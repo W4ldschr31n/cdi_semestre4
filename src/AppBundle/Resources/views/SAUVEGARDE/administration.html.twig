@@ -1,0 +1,66 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/administration.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <h2 class="fil_ariane">ADMINISTRATION</h2>
+    <section class="section" style="margin-bottom: 40px; position: relative; top: -10px;">
+        <h3 style="font-size: 14px; font-weight: normal; text-transform: uppercase; margin: -10px 0 5px;">Recherche :</h3>
+        {% include 'AppBundle::formulaireRecherche.html.twig' %}
+    </section>
+
+    <a href="{{ path('auteur_ajout') }}" class="tuile">
+        <img src="{{ asset('img/add_author.png') }}" alt="Ajout d'un auteur" />
+        <h2>Ajout d'un auteur</h2>
+    </a>
+
+    <div class="separation"></div>
+    <a href="{{ path('article_ajout_auteur') }}" class="tuile">
+        <img src="{{ asset('img/add_article.png') }}" alt="Ajout d'un article" />
+        <h2>Ajout d'un article</h2>
+    </a>
+
+    <div class="separation"></div>
+    <a href="{{ path('periodique_ajout') }}" class="tuile">
+        <img src="{{ asset('img/add_magazine.png') }}" alt="Ajout d'un périodique" />
+        <h2>Ajout d'un périodique</h2>
+    </a>
+
+    <a href="{{ path('auteur_liste') }}" class="tuile">
+        <img src="{{ asset('img/manage_authors.png') }}" alt="Gestion des auteurs" />
+        <h2>Gestion des auteurs</h2>
+    </a>
+
+    <div class="separation"></div>
+    
+    <a href="{{ path('article_liste') }}" class="tuile">
+        <img src="{{ asset('img/manage_articles.png') }}" alt="Gestion des articles" />
+        <h2>Gestion des articles</h2>
+    </a>
+
+    <div class="separation"></div>
+    <a href="{{ path('periodique_liste') }}" class="tuile">
+        <img src="{{ asset('img/manage_magazines.png') }}" alt="Gestion des périodiques" />
+        <h2>Gestion des périodiques</h2>
+    </a>
+</section>
+
+<script type="text/javascript">
+    document.getElementById("recherche_avancee").addEventListener("click", function(){
+        // Afficher
+        if(document.getElementById("champs_recherche_avancee").style.display == "none"){
+            document.getElementById("champs_recherche_avancee").style.display = "block";
+            document.getElementById("recherche_avancee").innerHTML = "Fermer la recherche avancée";
+        }
+
+        // Cacher
+        else{
+            document.getElementById("champs_recherche_avancee").style.display = "none";
+            document.getElementById("recherche_avancee").innerHTML = "Recherche avancée";
+        }
+    });
+
+</script>
+{% endblock %}

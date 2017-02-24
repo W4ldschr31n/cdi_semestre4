@@ -1,0 +1,188 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<style type="text/css" class="init">
+
+#dialog {
+  display: none;
+}
+
+#dialog button {
+  border: 2px solid #4e678b;
+  border-radius: 3px;
+  background-color: white;
+  padding: 2px;
+  color: #4e678b;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+#dialog button:hover {
+  background-color: #4e678b;
+  color: white;
+}
+
+.cote h5{
+  text-transform: uppercase;
+  padding-left : 10px;
+  color: black;
+}
+
+.cote:hover{
+  background-color: #D9D9D9;
+  cursor:  pointer;
+}
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.3.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript">
+var jQuery_1_12_4 = $.noConflict(true);
+jQuery_1_12_4(function() {
+
+  jQuery_1_12_4('.supprimer').each(function(index) {
+
+    // Dialogue de selection d'auteur
+    jQuery_1_12_4(this).click(function(event){
+      var idCote = $(this).attr('href');
+      event.preventDefault();
+      $('#dialogConfirm').dialog();
+
+      jQuery_1_12_4('.non').click(function() {
+        $('#dialogConfirm').dialog('close');
+      });
+
+      // Dialog de confirmation
+      jQuery_1_12_4('.oui').click(function() {
+        var idRemplacement = jQuery_1_12_4('#choixCote').val();
+        $('#dialogConfirm').dialog('close');
+
+        // alert(lien);
+
+        jQuery_1_12_4('.non').click(function() {
+          $('#dialog').dialog('destroy');
+          $('#dialogConfirm').dialog('destroy');
+        });
+
+        // Si confirmation plus acceptation auteur
+        jQuery_1_12_4('.oui').click(function() {
+          //Creation du lien
+          var lien = '{{ path("cote_supprimer", {'id': 13, 'idRemplacement': 13}) }}';
+          var lienArr = lien.split("/");
+          lienArr[lienArr.length-1] = idCote+"_"+idRemplacement;
+          var lien = lienArr.join("/");
+
+          //envoi de la requete et rechargement de la page
+          document.location.href = lien;
+          $('#dialog').dialog('destroy');
+          $('#dialogConfirm').dialog('destroy');
+          location.reload();
+        });
+      });
+    });
+
+  });
+});
+</script>
+
+<script type="text/javascript" class="init">
+
+jQuery_1_12_4(document).ready(function() {
+  jQuery_1_12_4('#liste_cote').DataTable(
+    {
+      "oLanguage": {
+        "sProcessing":     "Traitement en cours...",
+        "sSearch":         "Rechercher :",
+        "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+        "sInfo":           "Affichage de l'&eacute;l&eacute;ment _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        "sInfoEmpty":      "Affichage de l'&eacute;l&eacute;ment 0 &agrave; 0 sur 0 &eacute;l&eacute;ment",
+        "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+        "sInfoPostFix":    "",
+        "sLoadingRecords": "Chargement en cours...",
+        "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+        "sEmptyTable":     "Aucune donn&eacute;e disponible dans le tableau",
+        "oPaginate": {
+          "sFirst":      "Premier",
+          "sPrevious":   "Pr&eacute;c&eacute;dent",
+          "sNext":       "Suivant",
+          "sLast":       "Dernier"
+        },
+        "oAria": {
+          "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+          "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+        }
+      }
+    }
+
+  );
+} );
+</script>
+{% endblock %}
+
+
+{% block body %}
+<h2 class="fil_ariane"><a href="{{ path('administration') }}">Administration</a> > {{ 'Gestion des cotes'|upper }}</h2>
+
+<a href="{{ path('cote_ajout') }}">
+  <button class="tuile" type="submit">
+    Ajouter une cote
+  </button>
+</a>
+<br><br><br>
+
+<section >
+  {# Si il y a des cotes, on les affiches, sinon on affiche un message d'erreur. #}
+  {% if cotes %}
+  <table style="margin: auto;" class="display" id="liste_cote" >
+    <thead>
+      <tr>
+        <th>
+          Nom de la cote
+        </th>
+        <th></th>
+        <th></th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for cote in cotes %}
+      <tr class="cote">
+        <td><a href="{{ path('article_listeArticleCote', {'nom' : cote.nom|upper }) }}" ><h5>{{ cote.nom|capitalize }}</h5></a></td>
+        <td><a href="{{ path('cote_editer', {"id": cote.id}) }}"><img style="width: 15px; height: 15px;" src="{{ asset('img/edit_icon.png') }}" alt="Editer la cote"/></a></td>
+        <td><a class="supprimer" href="{{cote.id}}"><img style="width: 15px; height: 15px;" src="{{ asset('img/delete_icon.png') }}" alt="Supprimer la cote"/></a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="erreur">Aucune cote dans la base de données.</div>
+  {% endif %}
+
+  <div id="dialog" title="Suppression">
+    <p>Si vous supprimez cet cote, tous les articles qui lui sont affiliés verons leur cote remplacé par celui séléctionné précédemment.</p>
+    <p>Voulez-vous vraiment supprimer cet cote ?</p>
+    <button class="non">Non</button>
+    <button class="oui">Oui</button>
+  </div>
+
+  <div id="dialogConfirm" title="Remplacement" style="display:none;">
+    <p>Avant de supprimer la cote, merci de selectionner une nouvelle cote parmi cette liste : </p>
+    <select id="choixCote">
+      {% for cote in cotes %}
+        <option value="{{cote.id}}">{{ cote.nom|upper }}</option>
+      {% endfor %}</select>
+    <button class="non">Annuler</button>
+    <button class="oui">Continuer</button>
+  </div>
+</section>
+{% endblock %}
