@@ -50,23 +50,30 @@ if(is_array($recherche[0])){
   $queryBuilder->leftJoin("a.auteur2", "au2");
   $queryBuilder->leftJoin("a.auteur3", "au3");
   $queryBuilder->leftJoin("a.cote", "c");
-  $queryBuilder->leftJoin("a.groupement", "g");
 
   $auteur = split(" ", $valeur, 2);
+  // $space = explode(" ",$valeur);
 
-  $chaineTousChamps = '(a.titre LIKE :valeur OR a.resume LIKE :valeur OR p.nom LIKE :valeur OR c.nom LIKE :valeur OR g.nom LIKE :valeur OR a.motClef LIKE :valeur) ';
+  $chaineTousChamps = '(a.titre LIKE :valeur OR a.resume LIKE :valeur OR p.nom LIKE :valeur OR c.nom LIKE :valeur OR a.motClef LIKE :valeur) ';
 
+  // $chaineAuteur = " (au.nom LIKE : valeur OR au2.nom LIKE : valeur OR au3.nom LIKE : valeur)";
   $chaineAuteur =(count($auteur) >= 2
-  ? ' (au.prenom LIKE :prenom AND au.nom LIKE :nom) OR (au.prenom LIKE :nom AND au.nom LIKE :prenom)
-  OR (au2.prenom LIKE :prenom AND au2.nom LIKE :nom) OR (au2.prenom LIKE :nom AND au2.nom LIKE :prenom)
-  OR (au3.prenom LIKE :prenom AND au3.nom LIKE :nom) OR (au3.prenom LIKE :nom AND au3.nom LIKE :prenom)'
-  :' (au.prenom LIKE :auteur OR au.nom LIKE :auteur)
-  OR (au2.prenom LIKE :auteur OR au2.nom LIKE :auteur)
-  OR (au3.prenom LIKE :auteur OR au3.nom LIKE :auteur)');
+  ? ' (au.nom LIKE :nom) OR (au.nom LIKE :prenom)
+  OR (au2.nom LIKE :nom) OR (au2.nom LIKE :prenom)
+  OR (au3.nom LIKE :nom) OR (au3.nom LIKE :prenom)'
+  :' (au.nom LIKE :auteur)
+  OR (au2.nom LIKE :auteur)
+  OR (au3.nom LIKE :auteur)');
 
 
   switch($type){
     case "tousChamps":
+    // On commence la requête avec un where 0 qui ne change rien au résultat (syntaxe)
+    // $queryBuilder->where("0=valeur");
+    // foreach($space as $datum){
+    //   $queryBuilder->orWhere($chaineTousChamps . " OR " . $chaineAuteur);
+    //   $queryBuilder->setParameter("valeur", "%".$datum."%");
+    // }
     $queryBuilder->where($chaineTousChamps .' OR '. $chaineAuteur);
     $queryBuilder->setParameter('valeur', "%".$valeur."%");
     if(count($auteur) >= 2){
@@ -116,15 +123,15 @@ if(!empty($recherche[1])){
   $valeur2 = $recherche[1][2];
   $auteur2 = split(" ", $valeur2, 2);
 
-  $chaineTousChamps2 = '(a.titre LIKE :valeur2 OR a.resume LIKE :valeur2 OR p.nom LIKE :valeur2 OR c.nom LIKE :valeur2 OR g.nom LIKE :valeur2 OR a.motClef LIKE :valeur2) ';
+  $chaineTousChamps2 = '(a.titre LIKE :valeur2 OR a.resume LIKE :valeur2 OR p.nom LIKE :valeur2 OR c.nom LIKE :valeur2 OR a.motClef LIKE :valeur2) ';
 
   $chaineAuteur2 =(count($auteur2) >= 2
-  ? '(au.prenom LIKE :prenom2 AND au.nom LIKE :nom2) OR (au.prenom LIKE :nom2 AND au.nom LIKE :prenom2)
-  OR (au2.prenom LIKE :prenom2 AND au2.nom LIKE :nom2) OR (au2.prenom LIKE :nom2 AND au2.nom LIKE :prenom2)
-  OR (au3.prenom LIKE :prenom2 AND au3.nom LIKE :nom2) OR (au3.prenom LIKE :nom2 AND au3.nom LIKE :prenom2)'
-  :'(au.prenom LIKE :auteur2 OR au.nom LIKE :auteur2)
-  OR (au2.prenom LIKE :auteur2 OR au2.nom LIKE :auteur2)
-  OR (au3.prenom LIKE :auteur2 OR au3.nom LIKE :auteur2)');
+  ? '(au.nom LIKE :nom2) OR (au.nom LIKE :prenom2)
+  OR (au2.nom LIKE :nom2) OR (au2.nom LIKE :prenom2)
+  OR (au3.nom LIKE :nom2) OR (au3.nom LIKE :prenom2)'
+  :'(au.nom LIKE :auteur2)
+  OR (au2.nom LIKE :auteur2)
+  OR (au3.nom LIKE :auteur2)');
 
   switch($type2){
     case "tousChamps":
@@ -213,15 +220,15 @@ if(!empty($recherche[2])){
   $valeur3 = $recherche[1][2];
   $auteur3 = split(" ", $valeur3, 2);
 
-  $chaineTousChamps3 = '(a.titre LIKE :valeur3 OR a.resume LIKE :valeur3 OR p.nom LIKE :valeur3 OR c.nom LIKE :valeur3 OR g.nom LIKE :valeur3 OR a.motClef LIKE :valeur3) ';
+  $chaineTousChamps3 = '(a.titre LIKE :valeur3 OR a.resume LIKE :valeur3 OR p.nom LIKE :valeur3 OR c.nom LIKE :valeur3 OR a.motClef LIKE :valeur3) ';
 
   $chaineAuteur3 =(count($auteur3) >= 2
-  ? '(au.prenom LIKE :prenom3 AND au.nom LIKE :nom3) OR (au.prenom LIKE :nom3 AND au.nom LIKE :prenom3)
-  OR (au2.prenom LIKE :prenom3 AND au2.nom LIKE :nom3) OR (au2.prenom LIKE :nom3 AND au2.nom LIKE :prenom3)
-  OR (au3.prenom LIKE :prenom3 AND au3.nom LIKE :nom3) OR (au3.prenom LIKE :nom3 AND au3.nom LIKE :prenom3)'
-  :'(au.prenom LIKE :auteur3 OR au.nom LIKE :auteur3)
-  OR (au2.prenom LIKE :auteur3 OR au2.nom LIKE :auteur3)
-  OR (au3.prenom LIKE :auteur3 OR au3.nom LIKE :auteur3)');
+  ? '(au.nom LIKE :nom3) OR (au.nom LIKE :prenom3)
+  OR (au2.nom LIKE :nom3) OR (au2.nom LIKE :prenom3)
+  OR (au3.nom LIKE :nom3) OR (au3.nom LIKE :prenom3)'
+  :'(au.nom LIKE :auteur3)
+  OR (au2.nom LIKE :auteur3)
+  OR (au3.nom LIKE :auteur3)');
 
 
   switch($type3){
@@ -309,15 +316,15 @@ if(!empty($recherche[3])){
   $valeur4 = $recherche[1][2];
   $auteur4 = split(" ", $valeur4, 2);
 
-  $chaineTousChamps4 = '(a.titre LIKE :valeur4 OR a.resume LIKE :valeur4 OR p.nom LIKE :valeur4 OR c.nom LIKE :valeur4 OR g.nom LIKE :valeur4 OR a.motClef LIKE :valeur4) ';
+  $chaineTousChamps4 = '(a.titre LIKE :valeur4 OR a.resume LIKE :valeur4 OR p.nom LIKE :valeur4 OR c.nom LIKE :valeur4 OR a.motClef LIKE :valeur4) ';
 
   $chaineAuteur4 =(count($auteur4) >= 2
-  ? '(au.prenom LIKE :prenom4 AND au.nom LIKE :nom4) OR (au.prenom LIKE :nom4 AND au.nom LIKE :prenom4)
-  OR (au2.prenom LIKE :prenom4 AND au2.nom LIKE :nom4) OR (au2.prenom LIKE :nom4 AND au2.nom LIKE :prenom4)
-  OR (au3.prenom LIKE :prenom4 AND au3.nom LIKE :nom4) OR (au3.prenom LIKE :nom4 AND au3.nom LIKE :prenom4)'
-  :'(au.prenom LIKE :auteur4 OR au.nom LIKE :auteur4)
-  OR (au2.prenom LIKE :auteur4 OR au2.nom LIKE :auteur4)
-  OR (au3.prenom LIKE :auteur4 OR au3.nom LIKE :auteur4)');
+  ? '(au.nom LIKE :nom4) OR (au.nom LIKE :prenom4)
+  OR (au2.nom LIKE :nom4) OR au2.nom LIKE :prenom4)
+  OR (au3.nom LIKE :nom4) OR (au3.nom LIKE :prenom4)'
+  :'(au.nom LIKE :auteur4)
+  OR (au2.nom LIKE :auteur4)
+  OR (au3.nom LIKE :auteur4)');
 
 
   switch($type4){

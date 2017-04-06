@@ -93,15 +93,15 @@ ul{
 
             {% if article.auteur or article.auteur2 or article.auteur2 %}
               {% if article.auteur %}
-                {{ article.auteur.prenom|first|capitalize}}. {{ article.auteur.nom|capitalize}}
+                {{ article.auteur.nom|capitalize}}
               {% endif %}
 
               {% if article.auteur2 %}
-                ,<br />{{ article.auteur2.prenom|first|capitalize}}. {{ article.auteur2.nom|capitalize}}
+                ,<br />{{ article.auteur2.nom|capitalize}}
               {% endif %}
 
               {% if article.auteur3 %}
-                ,<br />{{ article.auteur3.prenom|first|capitalize}}. {{ article.auteur3.nom|capitalize}}
+                ,<br />{{ article.auteur3.nom|capitalize}}
               {% endif %}
             {% else %}
               <i>Pas d'auteur</i>

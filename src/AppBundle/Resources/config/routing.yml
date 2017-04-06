@@ -28,7 +28,7 @@ redirection_accueil:
 
 # Routes pour les requêtes AJAX
 ajax_recherche_auteur:
-    path: /ajax/recherche/auteur/{prenom}/{nom}
+    path: /ajax/recherche/auteur/{nom}
     defaults: { _controller: AppBundle:Ajax:rechercheAuteur }
 
 ajax_recherche_periodique:

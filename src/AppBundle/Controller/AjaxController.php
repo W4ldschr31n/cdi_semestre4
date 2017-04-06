@@ -21,7 +21,7 @@ class AjaxController extends Controller
   *
   * @return Response
   */
-  public function rechercheAuteurAction($prenom, $nom)
+  public function rechercheAuteurAction($nom)
   {
     $request = Request::createFromGlobals();
 
@@ -35,10 +35,6 @@ class AjaxController extends Controller
       $em = $this->getDoctrine()->getManager();
 
       // Cas où le prénom/nom n'est pas renseigné
-      if($prenom == "null")
-      $prenom = null;
-      else
-      $prenom = strToLower($prenom);
 
       if($nom == "null")
       $nom = null;
@@ -47,13 +43,13 @@ class AjaxController extends Controller
 
       // Recherche via le repository
       $auteurRepository = $em->getRepository("CdiBundle:Auteur");
-      $res = $auteurRepository->recherche($prenom, $nom);
+      $res = $auteurRepository->recherche($nom);
 
 
       // Generation du tableau d'auteur et retour en json
       $auteurs = [];
       foreach($res as $key => $auteur){
-        $tab = ["prenom" => $auteur->getPrenom(), "nom" => $auteur->getNom(), "id" => $auteur->getId()];
+        $tab = ["nom" => $auteur->getNom(), "id" => $auteur->getId()];
         array_push($auteurs, $tab);
       }
       $response = new JsonResponse();

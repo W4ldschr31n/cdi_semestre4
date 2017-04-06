@@ -15,21 +15,16 @@ class AuteurRepository extends EntityRepository
     /**
      * Méthode pour recherche un auteur ayant un prenom et un nom semblables à ceux passés en paramètres.
      */
-    public function recherche($prenom, $nom){
+    public function recherche($nom){
         $queryBuilder = $this->createQueryBuilder('a');
-        
-        if(!is_null($prenom)){
-            $queryBuilder->andWhere('a.prenom LIKE :prenom');
-            $queryBuilder->setParameter('prenom', "%".$prenom."%");
-        }
-                    
+
         if(!is_null($nom)){
             $queryBuilder->andWhere('a.nom LIKE :nom');
             $queryBuilder->setParameter('nom', "%".$nom."%");
         }
-        
+
         $queryBuilder->setMaxResults(5);
-            
+
         $res = $queryBuilder->getQuery()->getResult();
         return $res;
     }

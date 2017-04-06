@@ -85,7 +85,7 @@ article_listeArticlePeriodique:
 
     #routage listeArticle pour un auteur
 article_listeArticleAuteur:
-  path: /admin/articles/listeArticleAuteur/{prenom}_{nom}
+  path: /admin/articles/listeArticleAuteur/{nom}
   defaults: { _controller: CdiBundle:Article:listeArticleAuteur}
 
 article_listeArticleCote:

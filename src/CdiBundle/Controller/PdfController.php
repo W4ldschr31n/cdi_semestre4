@@ -163,7 +163,7 @@ class pdf {
         $html .= "<h1 style='text-align : center; font-size: 40px;'>Sommaire :</h1>";
         $html .= "<table style='width : 100%;'>";
         foreach ($this->articlesTrier as $categorie) {
-            $html .= "<tr><td style='text-align: left; width : 24%;'>".strtoupper($categorie[0]->getCote()->getNom())."</td>";
+            $html .= "<tr><td style='text-align: left; width : 24%;'><a href=\"#test\">".strtoupper($categorie[0]->getCote()->getNom())."</a></td>";
             $html .= "<td style='text-align : center; right : 25%; width : 50%;'> ------------------------------------------------------------------------------------------ </td>";
             $html .= "<td style='text-align: right; right : 0%; width : 24%;'> Page : ".$page."</td></tr>";
             $page += ceil(count($categorie)/3);
@@ -177,7 +177,7 @@ class pdf {
         foreach ($this->articlesTrier as $categorie) {
             $nbr = 0;
             $html .= "<page A4>";
-            $html .= "<h1 style='text-align : center; font-size: 40px;'>".strtoupper($categorie[0]->getCote()->getNom())." :</h1><br>";
+            $html .= "<h1 id=\"test\" style=\"text-align : center; font-size: 40px;\">".strtoupper($categorie[0]->getCote()->getNom())." :</h1><br>";
             foreach ($categorie as $elmt){
                 $html .= $this->unArticle($elmt);
                 $nbr ++;
@@ -195,7 +195,17 @@ class pdf {
         $htmlarticle .= '<h1 class="titreArticle" style="text-align : center; font-size: 20px;">'.$article->getTitre().'</h1>';
         $htmlarticle .= '<h3 class="motClef" style="text-align : center; font-size: 10px; font-style:italic;">'.$article->getMotClef().'</h3>';
         $htmlarticle .= '<br><div class="resume" style="text-align:justify;">'.$article->getResume().'</div>';
-        $htmlarticle .= '<br><table style="width : 100%;""><tr><td style="width : 33%;"><div class="auteur" style="text-align : center;">'.$article->getAuteur()->getPrenom()." ".$article->getAuteur()->getNom().'</div></td>';
+        $htmlarticle .= '<br><table style="width : 100%;""><tr><td style="width : 33%;"><div class="auteur" style="text-align : center;">';
+        if (!is_null($article->getAuteur())){
+          $htmlarticle .= $article->getAuteur()->getNom();
+        }
+        if (!is_null($article->getAuteur2())){
+          $htmlarticle .= " ;" . $article->getAuteur2()->getNom();
+        }
+        if (!is_null($article->getAuteur3())){
+          $htmlarticle .= " ;" . $article->getAuteur3()->getNom();
+        }
+        $htmlarticle .= '</div></td>';
         $htmlarticle .= '<td style="width : 33%;"><div class="nomDeLaRevue" style="text-align : center;">'.$article->getPeriodique()->getNom().' ( revue n°'.$article->getNumeroPeriodique().' page n°'.$article->getPageDebut().' )</div></td>';
         $htmlarticle .= '<td style="width : 33%;"><div class="dateDeParution" style="text-align : center;">'.$article->getDateParution()->format('d-m-Y').'</div></td></tr></table>';
         $htmlarticle .= "</div>";

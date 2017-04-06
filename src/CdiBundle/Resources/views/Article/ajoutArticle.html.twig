@@ -6,21 +6,21 @@
 
   <style>
     .form-field{display: block;margin-bottom: 5px;    }
-    label{      display: inline-block;      font-size: 13px;      vertical-align: middle;      min-width: 150px;    }
-    p{      display: inline-block;      font-size: 13px;      vertical-align: middle;      min-width: 150px;    }
-    textarea{      vertical-align: top;    }
-    i{      display: block;      font-size: 12px;    }
-    #valider{      text-align: right;      margin-top: 10px;    }
-    #cote-info, #periodiques-info, #motclef-info {      display: none;    }
-    #motclef-proposition li {      width: 300px;      background-color: #4e678b;      font-size: 13px;      color: white;      margin-bottom: 5px;      padding: 10px;    }
-    #addMotClef, #addAuteur3, #addAuteur2 {      margin-top: 0px;      padding-top: 0px;      position: relative;      top : 10px;      display : inline-block;      width: 30px;    }
-    #motclef-proposition li.err {      cursor : default;      background-color: red;    }
-    #motclef-proposition li.err:hover {      cursor : default;    }
-    #motclef-proposition li.link {      cursor : default;      font-weight: bold;      font-style: italic;      font-stretch: expanded;      text-decoration: underline;      background-color: #4e678b;    }
-    #motclef-proposition li.link:hover {      cursor: pointer;    }
-    #motclef-proposition li:hover {      cursor: pointer;    }
-    #auteurs-proposition li, #auteurs2-proposition li, #auteurs3-proposition li{      width: 300px;      background-color: #4e678b;      font-size: 13px;      color: white;      margin-bottom: 5px;      padding: 10px;    }
-    #auteurs-proposition li:hover, #auteurs2-proposition li:hover, #auteurs2-proposition li:hover{      cursor: pointer;    }
+    label{ display: inline-block; font-size: 13px; vertical-align: middle; min-width: 150px;    }
+    p{ display: inline-block; font-size: 13px; vertical-align: middle; min-width: 150px;    }
+    textarea{ vertical-align: top;    }
+    i{ display: block; font-size: 12px;    }
+    #valider{ text-align: right; margin-top: 10px;    }
+    #cote-info, #periodiques-info, #motclef-info { display: none;    }
+    #motclef-proposition li { width: 300px; background-color: #4e678b; font-size: 13px; color: white; margin-bottom: 5px; padding: 10px;    }
+    .bouton { margin-top: 0px; padding-top: 0px; position: relative; top : 10px; display : inline-block; width: 30px;    }
+    #motclef-proposition li.err { cursor : default; background-color: red;    }
+    #motclef-proposition li.err:hover { cursor : default;    }
+    #motclef-proposition li.link { cursor : default; font-weight: bold; font-style: italic; font-stretch: expanded; text-decoration: underline; background-color: #4e678b;    }
+    #motclef-proposition li.link:hover { cursor: pointer;    }
+    #motclef-proposition li:hover { cursor: pointer;    }
+    #auteurs-proposition li, #auteurs2-proposition li, #auteurs3-proposition li{ width: 300px; background-color: #4e678b; font-size: 13px; color: white; margin-bottom: 5px; padding: 10px;    }
+    #auteurs-proposition li:hover, #auteurs2-proposition li:hover, #auteurs2-proposition li:hover{ cursor: pointer;    }
     #popupMask {    	position: absolute;    	z-index: 200;    	top: 0px;    	left: 0px;    	width: 100%;    	height: 100%;    	opacity: .4;    	filter: alpha(opacity=40);    	background-color:transparent !important;    	background-color: #333333;   	background-image: url("maskBG.png") !important;   	background-image:none;    	background-repeat: repeat;    	display:none;    }
     #popupContainer {    	position: absolute;    	z-index: 201;    	top: 0px;    	left: 0px;    	display:none;    	padding: 0px;    }
     #popupInner {    	border: 2px solid #000000;    	background-color: #ffffff;    }
@@ -28,7 +28,9 @@
     #popupTitleBar {    	background-color: #486CAE;    	color: #ffffff;    	font-weight: bold;    	height: 1.3em;    	padding: 5px;    	border-bottom: 2px solid #000000;    	border-top: 1px solid #78A3F2;    	border-left: 1px solid #78A3F2;    	border-right: 1px solid #204095;    	position: relative;    	z-index: 203;    }
     #popupTitle {    	float:left;    	font-size: 1.1em;    }
     #popupControls {    	float: right;    	cursor: pointer;    	cursor: hand;    	z-index: 204;    }
-    #auteur3 {      display: none;    }
+    #auteur3 { display: none;    }
+    #auteur2 { display: none;    }
+    #popCloseBox { width: 30px; display: block;    }
   </style>
 
 {% endblock %}
@@ -68,9 +70,12 @@
       {# Mot clef #}
       <div class="form-field">
         {{ form_label(form.motclef, 'Mot Clef :')}}
+        <input type="text" id="zone1" value="">
         {{ form_widget(form.motclef,{'id' : 'input-motclef', 'attr': {'placeholder': 'Mot Clef', 'autocomplete': 'off', 'style' : 'display : none;'}}) }}
-        <img src="" onclick="addMotClef()" id="addMotClef">
-        <img src="" onclick="" id="rechercheRameau">
+        <img src="{{ asset('img/add.png') }}" onclick="addMotClef()" id="addMotClef" class="bouton">
+        <img src="{{ asset('img/loupe.png') }}" onclick="envoiClient('Tout',$('#zone1').val(),'','','Type de notice','Rameau','','',
+    										null
+    										);return false;" id="rechercheRameau" class="bouton">
         <ul id="listeMotClef">
 
         </ul>
@@ -83,46 +88,60 @@
         {# Auteur n°1 #}
         <div class="form-field">
           {{ form_label(form.auteur, 'Collectif ou auteur :')}}
-          {{ form_widget(form.auteur,{'id' : 'input-auteur', 'attr': {'placeholder': 'Auteur ou collectif', 'autocomplete': 'off', 'list' : 'auteur-proposition'}}) }}
-          <img src="" onclick="addAuteur()" id="addAuteur">
-          <datalist id="auteur-proposition">
+          {{ form_widget(form.auteur,{'id' : 'input-auteur', 'attr': {'class':'auteur-input','placeholder': 'Auteur ou collectif', 'autocomplete': 'off', 'list' : 'auteurs-proposition'}}) }}
+          <img src="{{ asset('img/add.png') }}" onclick="addAuteur2()" id="addAuteur2" class="bouton">
+          <div id="auteurs-info"></div>
+          <datalist id="auteurs-proposition">
           </datalist>
         </div>
 
         {# Auteur n°2 #}
         <div class="form-field" id="auteur2">
           {{ form_label(form.auteur2, 'Collectif ou auteur 2 (*) :')}}
-          {{ form_widget(form.auteur2,{'id' : 'input-auteur2', 'attr': {'placeholder': 'Auteur ou collectif 2', 'autocomplete': 'off', 'list' : 'auteur-proposition2'}}) }}
-          <img src="" onclick="removeAuteur()" id="removeAuteur">
-          <img src="" onclick="addAuteur()" id="addAuteur">
-          <datalist id="auteur-proposition2">
+          {{ form_widget(form.auteur2,{'id' : 'input-auteur2', 'attr': {'class':'auteur-input','placeholder': 'Auteur ou collectif 2', 'autocomplete': 'off', 'list' : 'auteurs-proposition2'}}) }}
+          <img src="{{ asset('img/remove.png') }}" onclick="removeAuteur2()" id="removeAuteur2" class="bouton">
+          <img src="{{ asset('img/add.png') }}" onclick="addAuteur3()" id="addAuteur3" class="bouton">
+          <div id="auteurs-info2"></div>
+          <datalist id="auteurs-proposition2">
           </datalist>
         </div>
 
         {# Auteur n°3 #}
         <div class="form-field" id="auteur3">
+
           {{ form_label(form.auteur3, 'Collectif ou auteur 3 (*) :')}}
-          {{ form_widget(form.auteur3,{'id' : 'input-auteur3', 'attr': {'placeholder': 'Auteur ou collectif 3', 'autocomplete': 'off', 'list' : 'auteur-proposition3'}}) }}
-          <img src="" onclick="removeAuteur()" id="removeAuteur">
-          <datalist id="auteur-proposition3">
+          {{ form_widget(form.auteur3,{'id' : 'input-auteur3', 'attr': {'class':'auteur-input','placeholder': 'Auteur ou collectif 3', 'autocomplete': 'off', 'list' : 'auteurs-proposition3'}}) }}
+          <img src="{{ asset('img/remove.png') }}" onclick="removeAuteur3()" id="removeAuteur3" class="bouton">
+          <div id="auteurs-info3"></div>
+          <datalist id="auteurs-proposition3">
           </datalist>
         </div>
 
       </div>
 
+      {# Resume #}
+      <div class="form-field">
+        {{ form_label(form.resume, 'Resume :') }}
+        {{ form_widget(form.resume, {'id' : 'datepicker', 'attr': {'placeholder': 'resume', 'rows' : '4', 'cols' : '72'}}) }}
+      </div>
+
+      {# Date parution #}
+      <div class="form-field">
+        {{ form_label(form.dateParution, 'Date parution :') }}
+        {{ form_widget(form.dateParution, { 'attr': {'placeholder': 'JJ/MM/AAAA'} }) }}
+      </div>
 
       {# Nom périodique ET Numéro du périodique #}
       <div class="form-field">
-        <label for="input-periodique">Nom du périodique :</label>
-        <input type="text" list="periodiques-proposition" name="nomPeriodique" placeholder="Nom du périodique" id="input-periodique" autocomplete="off" required/>
-        <p id="periodiques-info"></p>
+        {{ form_label(form.nomPeriodique, 'Nom du périodique :') }}
+        {{ form_widget(form.nomPeriodique, {'id' : 'input-periodique', 'attr': {'placeholder': 'Nom du periodique', 'autocomplete': 'off', 'list' : 'periodiques-proposition', 'name' : 'nomPeriodique', 'required' : 'on'}} ) }}
         <datalist id="periodiques-proposition">
         </datalist>
 
         {{ form_label(form.numeroPeriodique, 'Numéro du périodique :') }}
         {{ form_widget(form.numeroPeriodique, { 'attr': {'placeholder': 'Numéro du périodique'} }) }}
+        <p id="periodiques-info"></p>
       </div>
-
 
       {# Page de début ET Page de fin #}
       <div class="form-field">
@@ -145,13 +164,9 @@
 
   </section>
 
-	<div id="resultat" style="display:none;"></div>
+	<div id="resultat" style="display:none"></div>
 
 {% endblock %}
-
-
-
-
 
 {% block javascripts %}
 
@@ -161,7 +176,10 @@
   <script type="text/javascript">
     var jQuery_1_10_2 = $.noConflict(true);
     // Traduction de la date (entre autre) :
-    jQuery_1_10_2(function() {      jQuery_1_10_2( ".calendar" ).datepicker({        altField: "#datepicker",        closeText: 'Fermer',        prevText: 'Précédent',        nextText: 'Suivant',        currentText: 'Aujourd\'hui',        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],        monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],        dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],        dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],        weekHeader: 'Sem.',        dateFormat: 'dd/mm/yy'      })      .datepicker("setDate", new Date());    });
+    jQuery_1_10_2(function() {
+      jQuery_1_10_2( ".calendar" ).datepicker({
+        altField: "datepicker",
+        closeText: 'Fermer',        prevText: 'Précédent',        nextText: 'Suivant',        currentText: 'Aujourd\'hui',        monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],        monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],        dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],        dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],        dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],        weekHeader: 'Sem.',        dateFormat: 'dd/mm/yy'      })      .datepicker("setDate", new Date());    });
   </script>
 
 
@@ -200,8 +218,8 @@
 
             // Sinon on affiche la liste
             $(data).each(function(index){
-              if(!$("#periodique"+this.id).length){
-                var str = "<option id=\""+ this.id +"\">" + this.nom + "</option>";
+              if(!$("periodique"+this.id).length){
+                var str = "<option id='"+ this.id +"'>" + this.nom + "</option>";
                 $('#periodiques-proposition').append(str);
               }
             });
@@ -258,8 +276,8 @@
 
             // Sinon on affiche la liste
             $(data).each(function(index){
-              if(!$("#cote"+this.id).length){
-                var str = "<option id=\""+ this.id +"\">" + this.nom + "</option>";
+              if(!$("cote"+this.id).length){
+                var str = "<option id='"+ this.id +"'>" + this.nom + "</option>";
                 $('#cote-proposition').append(str);
               }
             });
@@ -281,7 +299,6 @@
   </script>
 
 
-
   {# JS mot clef #}
   <script type="text/javascript">
     $(function(){
@@ -299,7 +316,7 @@
         // On rempli les nom/prenom si ils sont vides
         var motclef = $("#input-motclef").val();
         if(motclef == ""){
-          return;
+          return null;
         } else if(motclef.split(";").length > 1){
           var tmp = motclef.split("; ");
           motclef = tmp.pop();
@@ -364,32 +381,24 @@
 
 
       // Listener des changements de nom/prenom
-      $('.auteur-input').each(function(index){
-        $(this).on('input', function(){
+        $("#input-auteur").on('input', function(){
           // On ré-initialise le message d'info
           $('#auteurs-info').css("display", "none").html("");
           $('#auteurs-proposition').css("display", "none").html("");
 
           // On rempli les nom/prenom si ils sont vides
-          var prenom = $('#input-prenom').val();
-          var nom = $('#input-nom').val();
+          var nom = $("#input-auteur").val();
 
-          if(nom == "" && prenom == ""){
+          if(nom == ""){
             return "";
           }
 
-          if(prenom == "")
-          prenom = "null";
-
-          if(nom == "")
-          nom = "null";
 
           // On génère l'URL de la requête AJAX
-          var url = '{{ path("ajax_recherche_auteur", {'prenom': 'var-prenom', 'nom': 'var-nom'}) }}';
-          url = url.replace("var-prenom", prenom);
+          var url = '{{ path("ajax_recherche_auteur", {'nom': 'var-nom'}) }}';
           url = url.replace("var-nom", nom);
 
-
+//copier coller td
           $.ajax({
             url: url,
             data: {
@@ -406,20 +415,18 @@
               }
 
               // Sinon on affiche la liste
-              $('#auteurs-info').css("display", "block").html('Cliquez sur l\'auteur si il est dans la liste :');
-              $('#auteurs-proposition').css("display", "block");
+
+
               $(data).each(function(index){
-                if(!$("#auteur"+this.id).length){
-                  var str = "<li id="+ this.id +">" + this.prenom.charAt(0).toUpperCase() + this.prenom.substr(1) + " " + this.nom.toUpperCase() + "</li>";
+                  var str = "<option value=\""+ this.nom.toUpperCase() +"\">";
                   $('#auteurs-proposition').append(str);
-                }
+
               });
 
-              $('#auteurs-proposition li').each(function(index){
+              $('#auteurs-proposition option').each(function(index){
                 $(this).click(function(){
-                  var choix = $(this).html().split(' ', 2);
-                  $('#input-prenom').val(choix[0]);
-                  $('#input-nom').val(choix[1]);
+                  var choix = $(this).html();
+                  $('#input-nom').val(choix);
                   $('#auteurs-proposition').css("display", "none");
                   $('#auteurs-info').html('L\'auteur sera importé depuis la base de donnée.');
                 });
@@ -430,7 +437,6 @@
           });
         });
       });
-    });
   </script>
 
 
@@ -445,32 +451,24 @@
 
 
       // Listener des changements de nom/prenom
-      $('.auteur2-input').each(function(index){
-        $(this).on('input', function(){
+        $("#input-auteur2").on('input', function(){
           // On ré-initialise le message d'info
-          $('#auteurs2-info').css("display", "none").html("");
-          $('#auteurs2-proposition').css("display", "none").html("");
+          $('#auteurs-info2').css("display", "none").html("");
+          $('#auteurs-proposition2').css("display", "none").html("");
 
           // On rempli les nom/prenom si ils sont vides
-          var prenom = $('#input-prenom2').val();
-          var nom = $('#input-nom2').val();
+          var nom = $("#input-auteur2").val();
 
-          if(nom == "" && prenom == ""){
+          if(nom == ""){
             return "";
           }
 
-          if(prenom == "")
-          prenom = "null";
-
-          if(nom == "")
-          nom = "null";
 
           // On génère l'URL de la requête AJAX
-          var url = '{{ path("ajax_recherche_auteur", {'prenom': 'var-prenom', 'nom': 'var-nom'}) }}';
-          url = url.replace("var-prenom", prenom);
+          var url = '{{ path("ajax_recherche_auteur", {'nom': 'var-nom'}) }}';
           url = url.replace("var-nom", nom);
 
-
+//copier coller td
           $.ajax({
             url: url,
             data: {
@@ -482,27 +480,25 @@
             success: function(data) {
               // Si il n'y a pas de données
               if(data.length < 1){
-                $('#auteurs2-info').css("display", "block").html('Cet auteur n\'existe pas, il sera ajouté dans la base de données.');
+                $('#auteurs-info2').css("display", "block").html('Cet auteur n\'existe pas, il sera ajouté dans la base de données.');
                 return;
               }
 
               // Sinon on affiche la liste
-              $('#auteurs2-info').css("display", "block").html('Cliquez sur l\'auteur si il est dans la liste :');
-              $('#auteurs2-proposition').css("display", "block");
+
+
               $(data).each(function(index){
-                if(!$("#auteur"+this.id).length){
-                  var str = "<li id="+ this.id +">" + this.prenom.charAt(0).toUpperCase() + this.prenom.substr(1) + " " + this.nom.toUpperCase() + "</li>";
-                  $('#auteurs2-proposition').append(str);
-                }
+                  var str = "<option value=\""+ this.nom.toUpperCase() +"\">";
+                  $('#auteurs-proposition2').append(str);
+
               });
 
-              $('#auteurs2-proposition li').each(function(index){
+              $('#auteurs-proposition2 option').each(function(index){
                 $(this).click(function(){
-                  var choix = $(this).html().split(' ', 2);
-                  $('#input-prenom2').val(choix[0]);
-                  $('#input-nom2').val(choix[1]);
-                  $('#auteurs2-proposition').css("display", "none");
-                  $('#auteurs2-info').html('L\'auteur sera importé depuis la base de donnée.');
+                  var choix = $(this).html();
+                  $('#input-nom2').val(choix);
+                  $('#auteurs-proposition2').css("display", "none");
+                  $('#auteurs-info2').html('L\'auteur sera importé depuis la base de donnée.');
                 });
               });
 
@@ -511,7 +507,6 @@
           });
         });
       });
-    });
   </script>
 
 
@@ -520,37 +515,29 @@
   <script type="text/javascript">
     $(function(){
       // On cache les div de proposition
-      $('#auteurs3-info').css("display", "none").html("");
-      $('#auteurs3-proposition').css("display", "none").html("");
+      $('#auteurs-info3').css("display", "none").html("");
+      $('#auteurs-proposition3').css("display", "none").html("");
 
 
       // Listener des changements de nom/prenom
-      $('.auteur3-input').each(function(index){
-        $(this).on('input', function(){
+        $("#input-auteur3").on('input', function(){
           // On ré-initialise le message d'info
-          $('#auteurs3-info').css("display", "none").html("");
-          $('#auteurs3-proposition').css("display", "none").html("");
+          $('#auteurs-info3').css("display", "none").html("");
+          $('#auteurs-proposition3').css("display", "none").html("");
 
           // On rempli les nom/prenom si ils sont vides
-          var prenom = $('#input-prenom3').val();
-          var nom = $('#input-nom3').val();
+          var nom = $("#input-auteur3").val();
 
-          if(nom == "" && prenom == ""){
+          if(nom == ""){
             return "";
           }
 
-          if(prenom == "")
-          prenom = "null";
-
-          if(nom == "")
-          nom = "null";
 
           // On génère l'URL de la requête AJAX
-          var url = '{{ path("ajax_recherche_auteur", {'prenom': 'var-prenom', 'nom': 'var-nom'}) }}';
-          url = url.replace("var-prenom", prenom);
+          var url = '{{ path("ajax_recherche_auteur", {'nom': 'var-nom'}) }}';
           url = url.replace("var-nom", nom);
 
-
+          //La requête permet de trouver un auteur correspondant
           $.ajax({
             url: url,
             data: {
@@ -562,27 +549,25 @@
             success: function(data) {
               // Si il n'y a pas de données
               if(data.length < 1){
-                $('#auteurs3-info').css("display", "block").html('Cet auteur n\'existe pas, il sera ajouté dans la base de données.');
+                $('#auteurs-info3').css("display", "block").html('Cet auteur n\'existe pas, il sera ajouté dans la base de données.');
                 return;
               }
 
               // Sinon on affiche la liste
-              $('#auteurs3-info').css("display", "block").html('Cliquez sur l\'auteur si il est dans la liste :');
-              $('#auteurs3-proposition').css("display", "block");
+
+
               $(data).each(function(index){
-                if(!$("#auteur"+this.id).length){
-                  var str = "<li id="+ this.id +">" + this.prenom.charAt(0).toUpperCase() + this.prenom.substr(1) + " " + this.nom.toUpperCase() + "</li>";
-                  $('#auteurs3-proposition').append(str);
-                }
+                  var str = "<option value=\""+ this.nom.toUpperCase() +"\">";
+                  $('#auteurs-proposition3').append(str);
+
               });
 
-              $('#auteurs3-proposition li').each(function(index){
+              $('#auteurs-proposition3 option').each(function(index){
                 $(this).click(function(){
-                  var choix = $(this).html().split(' ', 2);
-                  $('#input-prenom3').val(choix[0]);
-                  $('#input-nom3').val(choix[1]);
-                  $('#auteurs3-proposition').css("display", "none");
-                  $('#auteurs3-info').html('L\'auteur sera importé depuis la base de donnée.');
+                  var choix = $(this).html();
+                  $('#input-nom3').val(choix);
+                  $('#auteurs-proposition3').css("display", "none");
+                  $('#auteurs-info3').html('L\'auteur sera importé depuis la base de donnée.');
                 });
               });
 
@@ -591,7 +576,6 @@
           });
         });
       });
-    });
   </script>
 
 
@@ -636,7 +620,7 @@
 
     function envoiProduit(index1, index1Value, filtre1, filtre1Value){
     index1Value = index1Value.replace(/'/g,"\\\'");
-    // a commenter pour votre application
+    //
     $('#resultat').html("");
     $('#resultat').hide();
 
@@ -646,7 +630,7 @@
         oFrame.contentWindow.postMessage(serializer.stringify({Init:"true"}), "*");
         idrefinit=false;
     }
-    //TODO : il faut mettre le nom de votre application cliente à la place de la valeur : NomDeVotreApplication
+
     try{
       eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',fromApp:\'CDI\',AutoClick:\'true\'}), "*"); ');
     }
@@ -656,11 +640,10 @@
     }
 
 
-
+// Requête lors de l'ouverture du pop-up
     function envoiClient(index1,index1Value,index2,index2Value,filtre1,filtre1Value,filtre2,filtre2Value,zones){
 
       index1Value = index1Value.replace(/'/g,"\\\'");
-    // a commenter pour votre application
     $('#resultat').html("");
     $('#resultat').hide();
 
@@ -670,7 +653,7 @@
           oFrame.contentWindow.postMessage(serializer.stringify({Init:"true"}), "*");
           idrefinit=false;
       }
-    //TODO : il faut mettre le nom de votre application cliente à la place de la valeur : NomDeVotreApplication
+
       try{
         eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',fromApp:\'CDI\',AutoClick:\'true\'}), "*"); ');
         /*
@@ -720,7 +703,7 @@
     }
 
     function traiteResultat(e){
-    //partie à adapter pour votre client
+    //lorsqu'on clique sur lier la notice
     var data = serializer.parse(e.data);
 
     if (data["g"]!=null){
@@ -871,10 +854,10 @@
           '<div id="popupTitleBar">' +
             '<div id="popupTitle"></div>' +
             '<div id="popupControls">' +
-              '<img src="css/fermer.gif" onclick="hidePopWin(false);" id="popCloseBox" />' +
+              '<img src="./../../../../../web/img/remove.png" onclick="hidePopWin(false);" id="popCloseBox" />' +
             '</div>' +
           '</div>' +
-          '<iframe src="'+ gDefaultPage +'"  style="width:100%;height:100%;background-color:transparent;" scrolling="auto" frameborder="0" allowtransparency="true" id="popupFrame" name="popupFrame" width="100%" height="100%"></iframe>' +
+          '<iframe src="'+ gDefaultPage +'"  style="width:50px;height:50px;background-color:transparent;" scrolling="auto" frameborder="0" allowtransparency="true" id="popupFrame" name="popupFrame" width="100%" height="100%"></iframe>' +
         '</div>';
       theBody.appendChild(popmask);
       theBody.appendChild(popcont);
@@ -1105,8 +1088,6 @@
       /**
       * Hides all drop down form select boxes on the screen so they do not appear above the mask layer.
       * IE has a problem with wanted select form tags to always be the topmost z-index or layer
-      *
-      * Thanks for the code Scott!
       */
       function hideSelectBoxes() {
       var x = document.getElementsByTagName("SELECT");
@@ -1167,28 +1148,34 @@
           document.getElementById("input-motclef").value = document.getElementById("input-motclef").value.concat(lis[i].id + ";");  // L'appel de myNodeList.item(i) n'est pas nécessaire en JavaScript
         }
       }
-
+//Ajout d'un champ auteur
       function addAuteur2(){
-        var x = document.getElementsByClassName("auteur2");
-        for (var i = 0; i < x.length; i++) {
-          x[i].style.display = "inline-block";
-        }
-
-        x = document.getElementsByClassName("auteur2-input");
-        for (i = 0; i < x.length; i++) {
-          x[i].style.display = "inline-block";
-        }
+        document.getElementById("auteur2").style.display = "block";
+        document.getElementById("addAuteur2").style.display = "none";
+        document.getElementById("input-auteur").required = true;
       }
 
       function addAuteur3(){
-        var x = document.getElementsByClassName("auteur3");
-        for (var i = 0; i < x.length; i++) {
-          x[i].style.display = "inline-block";
-        }
+        document.getElementById("auteur3").style.display = "block";
+        document.getElementById("removeAuteur2").style.display = "none";
+        document.getElementById("addAuteur3").style.display = "none";
+        document.getElementById("input-auteur2").required = true;
+      }
+//Supression d'un champ auteur
+      function removeAuteur2(){
+        document.getElementById("auteur2").style.display = "none";
+        document.getElementById("addAuteur2").style.display = "inline-block";
+        document.getElementById("input-auteur2").value = "";
+        document.getElementById("input-auteur").required = false;
+      }
 
-        document.getElementById("auteur3").style.display = "inline-block";
+      function removeAuteur3(){
+        document.getElementById("auteur3").style.display = "none";
+        document.getElementById("removeAuteur2").style.display = "inline-block";
+        document.getElementById("addAuteur3").style.display = "inline-block";
+        document.getElementById("input-auteur3").value = "";
+        document.getElementById("input-auteur2").required = false;
       }
     </script>
 
-
-  {% endblock %}
+{% endblock %}

@@ -91,15 +91,10 @@ class Article
   private $auteur2;
   /**
   * @ORM\ManyToOne(targetEntity="CdiBundle\Entity\Auteur")
-  * @ORM\JoinColumn(nullable=false)
+  * @ORM\JoinColumn(nullable=true)
   */
   private $auteur3;
 
-  /**
-  * @ORM\ManyToOne(targetEntity="CdiBundle\Entity\Groupement")
-  * @ORM\JoinColumn(nullable=false)
-  */
-  private $groupement;
 
   /**
   * @ORM\ManyToOne(targetEntity="CdiBundle\Entity\Periodique")

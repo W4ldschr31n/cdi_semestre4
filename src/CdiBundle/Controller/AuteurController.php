@@ -67,7 +67,6 @@ class AuteurController extends Controller
         $formBuilder = $this->get('form.factory')->createBuilder('form', $auteur);
         $formBuilder
             ->add("nom", "text")
-            ->add("prenom", "text")
             ->add("ajout", "submit");
 
         $form = $formBuilder->getForm();
@@ -82,7 +81,6 @@ class AuteurController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($auteur);
             $auteur->setNom(strToLower($auteur->getNom()));
-            $auteur->setPrenom(strToLower($auteur->getPrenom()));
             $em->flush();
 
             // Returning to task list.
@@ -154,14 +152,12 @@ class AuteurController extends Controller
             return $this->redirect($this->generateUrl("auteur_liste"));
 
         // Affichage de l'auteur avec les majuscules
-        $auteur->setPrenom(ucfirst($auteur->getPrenom()));
         $auteur->setNom(strToUpper($auteur->getNom()));
 
         // Création du formulaire
         $formBuilder = $this->get('form.factory')->createBuilder('form', $auteur);
         $formBuilder
             ->add("nom", "text")
-            ->add("prenom", "text")
             ->add("ajout", "submit");
         $form = $formBuilder->getForm();
 
@@ -173,7 +169,6 @@ class AuteurController extends Controller
         if($form->isValid()){
             // Hydrate object
             $auteur->setNom(strToLower($auteur->getNom()));
-            $auteur->setPrenom(strToLower($auteur->getPrenom()));
             $em->flush();
 
             // Returning to task list.

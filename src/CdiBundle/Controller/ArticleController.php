@@ -67,7 +67,7 @@ class ArticleController extends Controller{
   }
 
 
-  /**
+  /**Dépréciée
   * @Route("/admin/article/ajout/auteur", name="article_ajout_auteur")
   *
   * @return Response
@@ -106,7 +106,7 @@ class ArticleController extends Controller{
   }
 
 
-  /**
+  /**Dépréciée
   * @Route("/admin/article/ajout/periodique", name="article_ajout_periodique")
   *
   * @return Response
@@ -155,7 +155,7 @@ class ArticleController extends Controller{
     if(!UserController::isAdmin())
     return $this->redirect($this->generateUrl("redirection_accueil"));
 
-    // Récupération des formulaires
+    // Récupération de la requête éventuelle
     $request = Request::createFromGlobals();
 
     // Création du formulaire
@@ -166,337 +166,156 @@ class ArticleController extends Controller{
      ->add("cote", "text")
      ->add("motclef", "text")
 
-     ->add("groupement", "text", ['required' => false])
-     ->add("prenomAuteur", "text", ['required' => false])
-     ->add("nomAuteur", "text", ['required' => false])
-     ->add("prenomAuteur2", "text", ['required' => false])
-     ->add("nomAuteur2", "text", ['required' => false])
-     ->add("prenomAuteur3", "text", ['required' => false])
-     ->add("nomAuteur3", "text", ['required' => false])
+     ->add("auteur", "text")
+     ->add("auteur2", "text", ['required' => false])
+     ->add("auteur3", "text", ['required' => false])
 
      ->add("resume", "textarea")
      ->add("dateParution", "date", ['widget' => 'single_text', 'format' => 'yyyy-MM-dd', "data" => new \DateTime()])
 
+     ->add("nomPeriodique", "text")
      ->add("numeroPeriodique", "text")
      ->add("pageDebut", "text")
      ->add("pageFin", "text", ['required' => false])
      ->add("save", "submit")
      ->getForm();
 
+     //Traitement des données
+     if ($request->getMethod() == 'POST') {
+       $article = new Article();
+       //Récupération des champs
+       $form->handleRequest($request);
+      // data est un tableau associatif avec le nom des champs en clé
+      $data = $form->getData();
 
-     // $article = new Article();
-     // $formBuilder = $this->get('form.factory')->createBuilder('form', $article);
-     // $formBuilder
-     // ->add("titre", "text")
-     // ->add("resume", "textarea")
-     // ->add("dateParution", "date", ['widget' => 'single_text', 'format' => 'yyyy-MM-dd', "data" => new \DateTime()])
-     // ->add("numeroPeriodique", "text")
-     // ->add("pageDebut", "text")
-     // ->add("pageFin", "text", ['required' => false])
-     // ->add("save", "submit");
-     // $form = $formBuilder->getForm();
-     //
-     // // Validation du formulaire
-     // $request = Request::createFromGlobals();
-     //
-     // //Verification auteur
-     // if(isset($_POST["prenomAuteur"]) && isset($_POST["nomAuteur"])){
-     //   //On recup les var
-     //   $prenom = strtolower($_POST["prenomAuteur"]);
-     //   $nom = strtolower($_POST["nomAuteur"]);
-     //
-     //   //On verifie qu'il existe dans la bdd
-     //   $em = $this->getDoctrine()->getManager();
-     //   $auteur = $em->getRepository("CdiBundle:Auteur")->findOneBy(["prenom" => $prenom, "nom" => $nom]);
-     //
-     //   // Si l'auteur n'existe pas on le créer à partir des infos
-     //   if(is_null($auteur)){
-     //     $auteur = new Auteur();
-     //     $auteur->setPrenom($prenom);
-     //     $auteur->setNom($nom);
-     //     $em->persist($auteur);
-     //     $em->flush();
-     //   }
-     //
-     //   //On ajoute l'auteur a l'article
-     //   $article->setAuteur($auteur);
-     // }
-     //
-     // //Meme verification pour le motclef
-     // if(isset($_POST["motClef"])){
-     //   //On recup les var
-     //   $motClef = $_POST["motClef"];
-     //
-     //   //On ajoute le periodique a l'article
-     //   $article->setMotClef($motClef);
-     // }
-     //
-     // //Meme verification pour le periodique
-     // if(isset($_POST["nomPeriodique"])){
-     //   //On recup les var
-     //   $nomPeriodique = $_POST["nomPeriodique"];
-     //   $em = $this->getDoctrine()->getManager();
-     //
-     //   $periodique = $em->getRepository("CdiBundle:Periodique")->findOneBy(["nom" => $nomPeriodique]);
-     //
-     //   // Si le périodique n'existe pas on le créer à partir des infos
-     //   if(is_null($periodique)){
-     //     $periodique = new Periodique();
-     //     $periodique->setNom($nomPeriodique);
-     //     $em->persist($periodique);
-     //     $em->flush();
-     //   }
-     //
-     //   //On ajout les var
-     //   $coteNom = $_POST["cote"];
-     //   $em = $this->getDoctrine()->getManager();
-     //
-     //   $cote = $em->getRepository("CdiBundle:Cote")->findOneBy(["nom" => $coteNom]);
-     //
-     //   // Si le périodique n'existe pas on le créer à partir des infos
-     //   if(is_null($cote)){
-     //     $cote = new Cote();
-     //     $cote->setNom($coteNom);
-     //     $cote->setActif(1);
-     //     $em->persist($cote);
-     //     $em->flush();
-     //   }
-     //
-     //   //On ajoute le periodique a l'article
-     //   $article->setCote($cote);
-     // }
-     //
-     // // Formattage de la date
-     // if(isset($request->request->get('form')["dateParution"]) && !is_null($request->request->get('form')["dateParution"])){
-     //   $submittedForm = $request->request->get('form');
-     //   $submittedDate = \DateTime::createFromFormat('d/m/Y', $submittedForm["dateParution"]);
-     //
-     //   if($submittedDate != false){
-     //     $submittedForm["dateParution"] = $submittedDate->format('Y-m-d');
-     //     $request->request->set('form', $submittedForm);
-     //   }
-     // }
-     //
-     //
-     // $form->handleRequest($request);
-     // if($form->isSubmitted() && $form->isValid()){
-     //   //Definition de la date d'enregistrement
-     //   $dateEnregistrement = new \DateTime();
-     //   $article->setDateEnregistrement($dateEnregistrement);
-     //     // Enregistrement de l'article dans les sessions
-     //   $session = new Session();
-     //   $session->set('article', $article);
-     //   $em = $this->getDoctrine()->getManager();
-     //   $em->persist($article);
-     //   $em->flush();
-     //
-     //   return $this->redirect($this->generateUrl('article_ajout'));
-     // }
+      //Auteurs
+      $nomAuteur1 = strtolower($data["auteur"]);
+      $nomAuteur2 = strtolower($data["auteur2"]);
+      $nomAuteur3 = strtolower($data["auteur3"]);
 
+      //On verifie qu'ils existent dans la bdd
+        $em = $this->getDoctrine()->getManager();
+        $auteur = $em->getRepository("CdiBundle:Auteur")->findOneBy(["nom"=>$nomAuteur1]);
+        // Si l'auteur n'existe pas on le crée à partir des infos
+        if(is_null($auteur)){
+          $auteur = new Auteur();
+          $auteur->setNom($nomAuteur1);
+          $em->persist($auteur);
+          $em->flush();
+        }
+        //On ajoute l'auteur à l'article;
+        $article->setAuteur($auteur);
+        //Auteur 2
+        if(!empty($nomAuteur2)){
+          $em = $this->getDoctrine()->getManager();
+          $auteur = $em->getRepository("CdiBundle:Auteur")->findOneBy(["nom"=>$nomAuteur2]);
 
+          // Si l'auteur n'existe pas on le crée à partir des infos
+          if(is_null($auteur)){
+            $auteur = new Auteur();
+            $auteur->setNom($nomAuteur2);
+            $em->persist($auteur);
+            $em->flush();
+          }
 
+          //On ajoute l'auteur à l'article
+          $article->setAuteur2($auteur);
+        }else{$article->setAuteur2(null);}
+        //Auteur 3
+        if(!empty($nomAuteur3)){
+          $em = $this->getDoctrine()->getManager();
+          $auteur = $em->getRepository("CdiBundle:Auteur")->findOneBy(["nom"=>$nomAuteur3]);
+          // Si l'auteur n'existe pas on le crée à partir des infos
+          if(is_null($auteur)){
+            $auteur = new Auteur();
+            $auteur->setNom($nomAuteur3);
+            $em->persist($auteur);
+            $em->flush();
+          }
 
+          //On ajoute l'auteur à l'article
+          $article->setAuteur3($auteur);
+        }else{$article->setAuteur3(null);}
 
+        //Mots-clefs
+        $motsclefs = $data["motclef"];
+        if(!empty($motsclefs)){
+          $article->setMotClef($motsclefs);
+        }
+        else{$article->setMotClef(null);}
+
+        //Titre
+        $titre = $data["titre"];
+        $article->setTitre($titre);
+
+        //Périodique
+        $nomPeriodique = $data["nomPeriodique"];
+        $em = $this->getDoctrine()->getManager();
+        $periodique = $em->getRepository("CdiBundle:Periodique")->findOneBy(["nom" => $nomPeriodique]);
+
+        // Si le périodique n'existe pas on le créer à partir des infos
+        if(is_null($periodique)){
+          $periodique = new Periodique();
+          $periodique->setNom($nomPeriodique);
+          $em->persist($periodique);
+          $em->flush();
+        }
+        $article->setPeriodique($periodique);
+
+        //Numero periodique
+        $numeroPeriodique=$data["numeroPeriodique"];
+        $article->setNumeroPeriodique($numeroPeriodique);
+
+        // Cote
+        $coteNom = $data["cote"];
+        $em = $this->getDoctrine()->getManager();
+        $cote = $em->getRepository("CdiBundle:Cote")->findOneBy(["nom" => $coteNom]);
+
+        // Si la cote n'existe pas, on la crée
+        if(is_null($cote)){
+          $cote = new Cote();
+          $cote->setNom($coteNom);
+          $cote->setActif(1);
+          $em->persist($cote);
+          $em->flush();
+        }
+        $article->setCote($cote);
+
+        //Resume
+        $resume = $data["resume"];
+        $article->setResume($resume);
+
+        //Page de debut
+        $pageDeb = $data["pageDebut"];
+        $article->setPageDebut($pageDeb);
+
+        //Page de fin
+        $pageFin = $data["pageFin"];
+        if(!empty($pageFin)){
+          $article->setPageFin($pageFin);
+        }else{$article->setPageFin(null);}
+
+        //Date de parution
+        $submittedDate = $data["dateParution"];
+        $article->setDateParution($submittedDate);
+
+        //Date d'enregistrement (date de la saisie)
+        $dateEnregistrement = new \DateTime();
+        $article->setDateEnregistrement($dateEnregistrement);
+
+        // Enregistrement de l'article dans les sessions
+        $session = new Session();
+        $session->set('article', $article);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($article);
+        $em->flush();
+        var_dump($article);
+        return $this->redirect($this->generateUrl('article_ajout'));
+      }
+      
      $viewParams = ["form" => $form->createView()];
      return $this->render('CdiBundle:Article:ajoutArticle.html.twig', $viewParams);
    }
-
-    //  if($request->isMethod("POST")){
-    //    $form->handleRequest($request);
-    //    $data = $form->getData();
-     //
-    //    if(isset($data["dateParution"]) && !is_null($data["dateParution"])){
-    //      $submittedDate = \DateTime::createFromFormat('d/m/Y', $data["dateParution"]);
-    //      if($submittedDate != false){
-    //        $data["dateParution"] = $submittedDate->format('Y-m-d');
-    //        $request->request->set('form', $data);
-    //      }
-    //    }
-     //
-    //    $article = new Article();
-    //
-    //    //Verification auteur
-    //    if(isset($data["prenomAuteur"]) && isset($dat["nomAuteur"])){
-    //      //On recup les var
-    //      $prenom = strtolower($data["prenomAuteur"]);
-    //      $nom = strtolower($data["nomAuteur"]);
-    //
-    //      //On verifie qu'il existe dans la bdd
-    //      $em = $this->getDoctrine()->getManager();
-    //      $auteur = $em->getRepository("CdiBundle:Auteur")->findOneBy(["prenom" => $prenom, "nom" => $nom]);
-    //
-    //      // Si l'auteur n'existe pas on le créer à partir des infos
-    //      if(is_null($auteur)){
-    //        $auteur = new Auteur();
-    //        $auteur->setPrenom($prenom);
-    //        $auteur->setNom($nom);
-    //        $em->persist($auteur);
-    //        $em->flush();
-    //      }
-    //
-    //      //On ajoute l'auteur a l'article
-    //      $article->setAuteur($auteur);
-    //    }
-    //
-    //    //Meme verification pour le motclef
-    //    if(isset($data["motClef"])){
-    //      //On recup les var
-    //      $motClef = $data["motClef"];
-    //
-    //      //On ajoute le periodique a l'article
-    //      $article->setMotClef($motClef);
-    //    }
-    //
-    //    //Meme verification pour le periodique
-    //    if(isset($data["nomPeriodique"])){
-    //      //On recup les var
-    //      $nomPeriodique = $data["nomPeriodique"];
-    //      $em = $this->getDoctrine()->getManager();
-    //
-    //      $periodique = $em->getRepository("CdiBundle:Periodique")->findOneBy(["nom" => $nomPeriodique]);
-    //
-    //      // Si le périodique n'existe pas on le créer à partir des infos
-    //      if(is_null($periodique)){
-    //        $periodique = new Periodique();
-    //        $periodique->setNom($nomPeriodique);
-    //        $em->persist($periodique);
-    //        $em->flush();
-    //      }
-    //
-    //      //On ajout les var
-    //      $coteNom = $data["cote"];
-    //      $em = $this->getDoctrine()->getManager();
-    //
-    //      $cote = $em->getRepository("CdiBundle:Cote")->findOneBy(["nom" => $coteNom]);
-    //
-    //      // Si le périodique n'existe pas on le créer à partir des infos
-    //      if(is_null($cote)){
-    //        $cote = new Cote();
-    //        $cote->setNom($coteNom);
-    //        $cote->setActif(1);
-    //        $em->persist($cote);
-    //        $em->flush();
-    //      }
-    //
-    //      //On ajoute le periodique a l'article
-    //      $article->setCote($cote);
-
-
-
-
-
-
-//TODO
-    // $article = new Article();
-    // $formBuilder = $this->get('form.factory')->createBuilder('form', $article);
-    // $formBuilder
-    // ->add("titre", "text")
-    // ->add("resume", "textarea")
-    // ->add("dateParution", "date", ['widget' => 'single_text', 'format' => 'yyyy-MM-dd', "data" => new \DateTime()])
-    // ->add("numeroPeriodique", "text")
-    // ->add("pageDebut", "text")
-    // ->add("pageFin", "text", ['required' => false])
-    // ->add("save", "submit");
-    // $form = $formBuilder->getForm();
-    //
-    // // Validation du formulaire
-    // $request = Request::createFromGlobals();
-    //
-    // //Verification auteur
-    // if(isset($_POST["prenomAuteur"]) && isset($_POST["nomAuteur"])){
-    //   //On recup les var
-    //   $prenom = strtolower($_POST["prenomAuteur"]);
-    //   $nom = strtolower($_POST["nomAuteur"]);
-    //
-    //   //On verifie qu'il existe dans la bdd
-    //   $em = $this->getDoctrine()->getManager();
-    //   $auteur = $em->getRepository("CdiBundle:Auteur")->findOneBy(["prenom" => $prenom, "nom" => $nom]);
-    //
-    //   // Si l'auteur n'existe pas on le créer à partir des infos
-    //   if(is_null($auteur)){
-    //     $auteur = new Auteur();
-    //     $auteur->setPrenom($prenom);
-    //     $auteur->setNom($nom);
-    //     $em->persist($auteur);
-    //     $em->flush();
-    //   }
-    //
-    //   //On ajoute l'auteur a l'article
-    //   $article->setAuteur($auteur);
-    // }
-    //
-    // //Meme verification pour le motclef
-    // if(isset($_POST["motClef"])){
-    //   //On recup les var
-    //   $motClef = $_POST["motClef"];
-    //
-    //   //On ajoute le periodique a l'article
-    //   $article->setMotClef($motClef);
-    // }
-    //
-    // //Meme verification pour le periodique
-    // if(isset($_POST["nomPeriodique"])){
-    //   //On recup les var
-    //   $nomPeriodique = $_POST["nomPeriodique"];
-    //   $em = $this->getDoctrine()->getManager();
-    //
-    //   $periodique = $em->getRepository("CdiBundle:Periodique")->findOneBy(["nom" => $nomPeriodique]);
-    //
-    //   // Si le périodique n'existe pas on le créer à partir des infos
-    //   if(is_null($periodique)){
-    //     $periodique = new Periodique();
-    //     $periodique->setNom($nomPeriodique);
-    //     $em->persist($periodique);
-    //     $em->flush();
-    //   }
-    //
-    //   //On ajout les var
-    //   $coteNom = $_POST["cote"];
-    //   $em = $this->getDoctrine()->getManager();
-    //
-    //   $cote = $em->getRepository("CdiBundle:Cote")->findOneBy(["nom" => $coteNom]);
-    //
-    //   // Si le périodique n'existe pas on le créer à partir des infos
-    //   if(is_null($cote)){
-    //     $cote = new Cote();
-    //     $cote->setNom($coteNom);
-    //     $cote->setActif(1);
-    //     $em->persist($cote);
-    //     $em->flush();
-    //   }
-    //
-    //   //On ajoute le periodique a l'article
-    //   $article->setCote($cote);
-    // }
-    //
-    // // Formattage de la date
-    // if(isset($request->request->get('form')["dateParution"]) && !is_null($request->request->get('form')["dateParution"])){
-    //   $submittedForm = $request->request->get('form');
-    //   $submittedDate = \DateTime::createFromFormat('d/m/Y', $submittedForm["dateParution"]);
-    //
-    //   if($submittedDate != false){
-    //     $submittedForm["dateParution"] = $submittedDate->format('Y-m-d');
-    //     $request->request->set('form', $submittedForm);
-    //   }
-    // }
-    //
-    //
-    // $form->handleRequest($request);
-    // if($form->isSubmitted() && $form->isValid()){
-    //   //Definition de la date d'enregistrement
-    //   $dateEnregistrement = new \DateTime();
-    //   $article->setDateEnregistrement($dateEnregistrement);
-    //     // Enregistrement de l'article dans les sessions
-    //   $session = new Session();
-    //   $session->set('article', $article);
-    //   $em = $this->getDoctrine()->getManager();
-    //   $em->persist($article);
-    //   $em->flush();
-    //
-    //   return $this->redirect($this->generateUrl('article_ajout'));
-    // }
-
-
 
 
   /**
@@ -795,14 +614,14 @@ class ArticleController extends Controller{
   }
 
   // Affiche la la vue de la liste des articles pour un auteur
-  public function listeArticleAuteurAction($prenom, $nom)
+  public function listeArticleAuteurAction($nom)
   {
     // On redirige les utilisateurs non-connectés
     if(!UserController::isConnected())
     return $this->redirect($this->generateUrl("redirection_accueil"));
 
     // Récupération du nom de l'auteur
-    $auteur = $prenom." ".$nom;
+    $auteur = $nom;
 
     $donneesRecherche = [  ["auteur", $auteur],
     NULL,

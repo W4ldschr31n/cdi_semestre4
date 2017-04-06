@@ -21,12 +21,6 @@ class Auteur
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prenom", type="string", length=255)
-     */
-    private $prenom;
 
     /**
      * @var string
@@ -39,34 +33,11 @@ class Auteur
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set prenom
-     *
-     * @param string $prenom
-     * @return Auteur
-     */
-    public function setPrenom($prenom)
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    /**
-     * Get prenom
-     *
-     * @return string 
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
     }
 
     /**
@@ -85,7 +56,7 @@ class Auteur
     /**
      * Get nom
      *
-     * @return string 
+     * @return string
      */
     public function getNom()
     {
